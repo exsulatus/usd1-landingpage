@@ -1,0 +1,566 @@
+:root {
+  /* --- Layout --- */
+  --container: 1200px;
+  --containerWide: 1320px;
+
+  /* --- Typography --- */
+  /* Friendly + simple. Let spacing do the hierarchy, not decoration. */
+  --font-sans: ui-rounded, "SF Pro Rounded", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
+
+  /* --- Core palette (light-first, paper-like) --- */
+  /* Intent: calm, friendly, readable. Keep the canvas warm + light. */
+  --bg: #fbfaf6; /* warm paper */
+  --surface: #ffffff; /* paper card */
+  --surface-2: #f6f4ee; /* gentle panel */
+  --surface-3: #f1efe8; /* deeper panel (rare) */
+  --surface-4: #fdfcf8; /* alt panel */
+  --text: #111827;
+  --muted: rgba(17, 24, 39, 0.72);
+  --muted2: rgba(17, 24, 39, 0.56);
+  --border: rgba(17, 24, 39, 0.10);
+  --borderStrong: rgba(17, 24, 39, 0.16);
+
+  /* --- Accent palette (small + cohesive; used sparingly) --- */
+  /* Primary: mint/teal (not blue/gold). Secondaries: coral + lavender. */
+  --accentMint: #21b58f; /* primary */
+  --accentCoral: #ff7a6b; /* secondary (warm, friendly) */
+  --accentLavender: #7b6cff; /* secondary (cool, playful) */
+
+  /* Back-compat aliases (some components still reference these names) */
+  --accentBlue: var(--accentLavender);
+  --accentViolet: var(--accentLavender);
+  --accentGold: var(--accentCoral);
+  --accentRed: var(--accentCoral);
+
+  --accentNavy: #111827;
+  --accentWhite: #ffffff;
+
+  /* Low-saturation tints for subtle section personality */
+  --tintMint: rgba(33, 181, 143, 0.10);
+  --tintCoral: rgba(255, 122, 107, 0.10);
+  --tintLavender: rgba(123, 108, 255, 0.10);
+
+  /* --- Section rhythm (subtle) --- */
+  --sectionPanel: var(--surface-2);
+  --sectionPanelAlt: var(--surface-4);
+  /* Keep texture extremely light. If this ever feels busy, remove it. */
+  --sectionTexture: repeating-linear-gradient(
+    0deg,
+    rgba(17, 24, 39, 0.015) 0,
+    rgba(17, 24, 39, 0.015) 1px,
+    transparent 1px,
+    transparent 26px
+  );
+
+  /* --- Elevation (paper, not glass) --- */
+  --shadowXs: 0 1px 0 rgba(17, 24, 39, 0.04);
+  --shadowSm: 0 6px 16px rgba(17, 24, 39, 0.08);
+  --shadowMd: 0 14px 34px rgba(17, 24, 39, 0.12);
+
+  /* Back-compat (older components still reference these) */
+  --shadowSoft: var(--shadowSm);
+  --shadow: var(--shadowMd);
+
+  /* --- Radius --- */
+  --radius-xl: 22px;
+  --radius-lg: 16px;
+  --radius-md: 14px;
+  --radius-sm: 12px;
+
+  /* --- Focus --- */
+  --focus: 0 0 0 4px rgba(33, 181, 143, 0.22);
+}
+
+html.dark {
+  /* Dark mode: clean inversion, keep accents alive. */
+  --bg: #0f1214;
+  --surface: #141a1c;
+  --surface-2: #0f1517;
+  --surface-3: #192022;
+  --surface-4: #0c1011;
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.70);
+  --muted2: rgba(255, 255, 255, 0.54);
+  --border: rgba(255, 255, 255, 0.10);
+  --borderStrong: rgba(255, 255, 255, 0.14);
+
+  --shadowXs: 0 1px 1px rgba(0, 0, 0, 0.50);
+  --shadowSm: 0 2px 8px rgba(0, 0, 0, 0.55);
+  --shadowMd: 0 10px 26px rgba(0, 0, 0, 0.62);
+
+  /* Back-compat (older components still reference these) */
+  --shadowSoft: var(--shadowSm);
+  --shadow: var(--shadowMd);
+
+  --focus: 0 0 0 4px rgba(33, 181, 143, 0.18);
+
+  --sectionPanel: rgba(16, 19, 26, 0.92);
+  --sectionPanelAlt: rgba(20, 24, 33, 0.92);
+  --sectionTexture: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.02) 0,
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 22px
+  );
+
+  /* Dark-mode tints keep section personality without lighting the whole page */
+  --tintMint: rgba(33, 181, 143, 0.14);
+  --tintCoral: rgba(255, 122, 107, 0.14);
+  --tintLavender: rgba(123, 108, 255, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: 10px;
+}
+
+button {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(33, 181, 143, 0.22);
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section {
+  padding: 92px 0;
+}
+
+/* Section rhythm: bg → soft panel → bg → alt panel (subtle, avoids monotony) */
+main > section.section {
+  background: transparent;
+}
+main > section.section:nth-of-type(2n) {
+  background: var(--sectionPanel);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+main > section.section:nth-of-type(4n) {
+  background: var(--sectionPanelAlt);
+}
+/* Add a very faint texture only on panel sections (keeps it calm, adds “time-on-page” comfort) */
+main > section.section:nth-of-type(2n)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--sectionTexture);
+  pointer-events: none;
+  opacity: 0.7;
+}
+main > section.section:nth-of-type(2n) {
+  position: relative;
+}
+
+/* Section “hooks”: small accent chips (no layout changes). */
+main > section.section {
+  position: relative;
+}
+main > section.section::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 76px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.08);
+  opacity: 0.6;
+}
+html.dark main > section.section::after {
+  background: rgba(255, 255, 255, 0.10);
+  opacity: 0.55;
+}
+main > section#about.section::after {
+  background: var(--tintLavender);
+  opacity: 1;
+}
+main > section#learn.section::after {
+  background: var(--tintMint);
+  opacity: 1;
+}
+main > section#fun.section::after {
+  background: var(--tintCoral);
+  opacity: 1;
+}
+main > section#news.section::after {
+  background: var(--tintLavender);
+  opacity: 1;
+}
+
+.sectionTitle {
+  font-size: 36px;
+  letter-spacing: -0.03em;
+  margin: 0 0 10px 0;
+}
+
+.sectionLead {
+  margin: 0 0 28px 0;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadowSm);
+  padding: 18px;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+
+html.dark .card {
+  background: var(--surface);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadowMd);
+  border-color: rgba(17, 24, 39, 0.14);
+}
+.card:focus-within {
+  border-color: rgba(33, 181, 143, 0.26);
+  box-shadow: var(--shadowSm), var(--focus);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+html.dark .pill {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 999px;
+  padding: 10px 14px;
+  border: 1px solid rgba(17, 24, 39, 0.10);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadowXs);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadowSm);
+  border-color: rgba(33, 181, 143, 0.24);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.btnPrimary {
+  border-color: rgba(33, 181, 143, 0.44);
+  background: var(--accentMint);
+  color: var(--accentWhite);
+}
+.btnPrimary:hover {
+  border-color: rgba(33, 181, 143, 0.55);
+}
+
+.btnDanger {
+  border-color: rgba(255, 122, 107, 0.38);
+  background: rgba(255, 122, 107, 0.16);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+html.dark .kbd {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 860px) {
+  .section {
+    padding: 66px 0;
+  }
+  .sectionTitle {
+    font-size: 28px;
+  }
+}
+
+/* --- App shell / pages --- */
+.skipLink {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--borderStrong);
+  background: var(--surface);
+  box-shadow: var(--shadowSm);
+  color: var(--text);
+  z-index: 100;
+  transform: translateY(-160%);
+  transition: transform 120ms ease;
+}
+.skipLink:focus {
+  transform: translateY(0);
+  outline: none;
+  box-shadow: var(--shadowSm), var(--focus);
+}
+
+.page {
+  padding: 30px 0 70px 0;
+}
+
+.pageHeader {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.pageTitle {
+  margin: 0;
+  letter-spacing: -0.035em;
+  font-size: 42px;
+  line-height: 1.04;
+}
+
+.pageLead {
+  margin: 0;
+  color: var(--muted);
+  max-width: 75ch;
+}
+
+.pageActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+@media (max-width: 860px) {
+  .pageTitle {
+    font-size: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- Site header/footer primitives (used by components/Header + components/Footer) --- */
+.siteHeader {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+html.dark .siteHeader {
+  background: var(--surface);
+}
+
+.siteHeaderBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 20px;
+}
+
+.siteNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 1 1 auto;
+}
+
+.siteNavLink {
+  padding: 9px 12px;
+  border-radius: 999px;
+  color: var(--muted);
+  border: 1px solid transparent;
+  transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+.siteNavLink:hover {
+  color: var(--text);
+  border-color: var(--border);
+  background: rgba(33, 181, 143, 0.10);
+}
+.siteNavLink:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.siteHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.siteHeaderIconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--text);
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: none;
+}
+html.dark .siteHeaderIconBtn {
+  background: rgba(255, 255, 255, 0.06);
+}
+.siteHeaderIconBtn:hover {
+  border-color: rgba(33, 181, 143, 0.24);
+}
+.siteHeaderIconBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.themeToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.40);
+  color: var(--text);
+  padding: 10px 12px;
+  cursor: pointer;
+  box-shadow: none;
+  min-width: 0;
+}
+html.dark .themeToggleBtn {
+  background: rgba(255, 255, 255, 0.06);
+}
+.themeToggleBtn:hover {
+  border-color: rgba(33, 181, 143, 0.24);
+}
+.themeToggleBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+.themeToggleText {
+  font-size: 12px;
+  color: var(--muted2);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.siteMobilePanel {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+html.dark .siteMobilePanel {
+  background: var(--surface);
+}
+.siteMobilePanelInner {
+  display: grid;
+  gap: 8px;
+  padding: 12px 20px 16px 20px;
+}
+.siteMobileLink {
+  padding: 12px 14px;
+  border-radius: 16px;
+  color: var(--text);
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.55);
+}
+html.dark .siteMobileLink {
+  background: rgba(255, 255, 255, 0.06);
+}
+.siteMobileLink:hover {
+  border-color: rgba(33, 181, 143, 0.26);
+}
+.siteMobileLink:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.siteHamburger {
+  display: none;
+}
+
+@media (max-width: 920px) {
+  .siteNav {
+    display: none;
+  }
+  .siteHamburger {
+    display: inline-flex;
+  }
+}
+
+

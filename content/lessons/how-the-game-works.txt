@@ -1,0 +1,53 @@
+# The “money game” has rules
+Money isn’t just paper or numbers.
+It’s also rules: who can make it, how it moves, and what it can buy.
+
+When the rules change, people feel it.
+
+---PAGE---
+# Inflation (the simple idea)
+Inflation means prices go up over time.
+
+If prices go up, each dollar buys a little less.
+That can happen for many reasons:
+
+- More money is chasing the same stuff.
+- Supplies are lower (less stuff to buy).
+- People expect prices to rise and act differently.
+
+---PAGE---
+# Incentives (why people do things)
+An incentive is a reason to do something.
+
+Examples:
+- A discount makes you buy now.
+- A fee makes you wait.
+- A reward makes you keep playing.
+
+Good systems try to line up incentives with good behavior.
+Bad systems reward shortcuts.
+
+---PAGE---
+# Trust is the quiet engine
+Money works best when people trust it.
+
+Trust comes from:
+- Clear rules
+- Fair enforcement
+- Easy verification
+
+In crypto, verification can be stronger (you can check on-chain).
+But stories and hype can still confuse people.
+
+---PAGE---
+# Stablecoins, memes, and attention
+Some coins aim to be stable.
+Some coins are memes.
+
+Stability is about staying steady.
+Memes are about attention and community.
+
+Sometimes these worlds bump into each other.
+When they do, stay calm and ask: “What is this trying to do?”
+
+
