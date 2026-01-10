@@ -41,9 +41,9 @@ More text...
 The site works without AI.
 
 To enable AI chat, set environment variables:
-- `XAI_API_KEY`: your xAI API key
+- `XAI_API_KEY`: your xAI API key (or `GROK_API_KEY` as an alias)
 - `XAI_BASE_URL` (optional): defaults to `https://api.x.ai/v1`
-- `LLM_MODEL` (optional): defaults to `grok-2`
+- `LLM_MODEL` (optional): defaults to `grok-2-latest`
 - `LLM_DISABLED` (optional): set to `true` to disable AI completely
 
 The only place the frontend calls is `POST /api/chat`. Provider logic is isolated in `lib/llm/`.

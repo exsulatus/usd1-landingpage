@@ -16,4 +16,21 @@ export type Lesson = LessonMeta & {
   pages: LessonPage[];
 };
 
+export type FeaturedLesson = {
+  lessonId: LessonId;
+  pageIndex: number;
+  title: string;
+  description: string;
+  tag?: "Good first read" | "Popular" | "Short" | "Foundational";
+};
+
+export type CategoryMeta = {
+  id: LessonId;
+  title: string;
+  description: string;
+  accent: "mint" | "lavender" | "coral";
+};
+
+
+
 

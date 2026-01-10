@@ -45,7 +45,8 @@ export async function POST(req: Request) {
 
   try {
     const result = await generateLessonReply({
-      model: process.env.LLM_MODEL ?? "grok-2",
+      // Use env override when provided; otherwise use a safer "latest" model name.
+      model: process.env.LLM_MODEL ?? "grok-2-latest",
       messages,
       temperature: 0.3
     });
@@ -55,9 +56,20 @@ export async function POST(req: Request) {
     const msg = e instanceof Error ? e.message : "Unknown error";
     // Keep the site functional even when AI is off.
     const status =
-      msg === "LLM_DISABLED" || msg.includes("Missing XAI_API_KEY") ? 503 : 500;
+      msg === "LLM_DISABLED" ||
+      msg.includes("Missing XAI_API_KEY") ||
+      msg.includes("Missing GROK_API_KEY") ||
+      msg.includes("Grok API error 401") ||
+      msg.includes("Grok API error 403") ||
+      msg.includes("Grok API error 429")
+        ? 503
+        : 500;
     return NextResponse.json(
-      { error: "AI unavailable", detail: msg, hint: "Set XAI_API_KEY or disable chat UI." },
+      {
+        error: "AI unavailable",
+        detail: msg,
+        hint: "Set XAI_API_KEY (or GROK_API_KEY) and redeploy, or set LLM_DISABLED=true to hide chat."
+      },
       { status }
     );
   }

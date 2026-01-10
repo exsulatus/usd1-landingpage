@@ -103,7 +103,13 @@ export function EducationSection() {
   }, []);
 
   return (
-    <section id="learn" className="section edu" ref={(n) => (sectionRef.current = n)}>
+    <section
+      id="learn"
+      className="section edu"
+      ref={(n) => {
+        sectionRef.current = n;
+      }}
+    >
       <div className="container">
         <h2 className="sectionTitle">Learn</h2>
         <p className="sectionLead">
@@ -114,7 +120,9 @@ export function EducationSection() {
           {/* teacher (in front of middle card) */}
           <div
             className={TEACHER_FACES_CARDS ? "teacher flipped" : "teacher"}
-            ref={(n) => (teacherRef.current = n)}
+            ref={(n) => {
+              teacherRef.current = n;
+            }}
             aria-hidden="true"
           >
             <TeacherMascot stickAngleDeg={angle} showStick={false} />

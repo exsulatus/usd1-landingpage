@@ -8,7 +8,7 @@ export function HeroIllustration() {
       height="auto"
       role="img"
       aria-label="UnicornSheepDog1 smiling"
-      preserveAspectRatio="xMidYMid meet"
+      preserveAspectRatio="xMidYMid slice"
     >
       {/* Flat, softly-shaded backdrop (no gradients) */}
       <rect x="18" y="18" width="1164" height="484" rx="46" fill="rgba(33, 181, 143, 0.10)" />

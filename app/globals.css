@@ -72,6 +72,16 @@
 
   /* --- Focus --- */
   --focus: 0 0 0 4px rgba(33, 181, 143, 0.22);
+
+  /* --- Footer (darker, grounded) --- */
+  --footerBg: #e8e6de;
+  --footerText: rgba(17, 24, 39, 0.75);
+  --footerHeading: #111827;
+  --footerMuted: rgba(17, 24, 39, 0.50);
+  --footerLink: rgba(17, 24, 39, 0.68);
+  --footerLinkHover: #111827;
+  --footerDivider: rgba(17, 24, 39, 0.10);
+  --footerDisclaimer: rgba(17, 24, 39, 0.45);
 }
 
 html.dark {
@@ -96,6 +106,16 @@ html.dark {
   --shadow: var(--shadowMd);
 
   --focus: 0 0 0 4px rgba(33, 181, 143, 0.18);
+
+  /* --- Footer (darker, grounded) --- */
+  --footerBg: #080a0c;
+  --footerText: rgba(255, 255, 255, 0.62);
+  --footerHeading: rgba(255, 255, 255, 0.88);
+  --footerMuted: rgba(255, 255, 255, 0.40);
+  --footerLink: rgba(255, 255, 255, 0.55);
+  --footerLinkHover: rgba(255, 255, 255, 0.88);
+  --footerDivider: rgba(255, 255, 255, 0.08);
+  --footerDisclaimer: rgba(255, 255, 255, 0.35);
 
   --sectionPanel: rgba(16, 19, 26, 0.92);
   --sectionPanelAlt: rgba(20, 24, 33, 0.92);
@@ -209,19 +229,19 @@ html.dark main > section.section::after {
   opacity: 0.55;
 }
 main > section#about.section::after {
-  background: var(--tintLavender);
+  background: rgba(123, 108, 255, 0.35);
   opacity: 1;
 }
 main > section#learn.section::after {
   background: var(--tintMint);
   opacity: 1;
 }
-main > section#fun.section::after {
+main > section#games.section::after {
   background: var(--tintCoral);
   opacity: 1;
 }
 main > section#news.section::after {
-  background: var(--tintLavender);
+  background: linear-gradient(90deg, rgba(123, 108, 255, 0.35) 0%, rgba(33, 181, 143, 0.35) 50%, rgba(255, 122, 107, 0.35) 100%);
   opacity: 1;
 }
 
@@ -235,6 +255,78 @@ main > section#news.section::after {
   margin: 0 0 28px 0;
   color: var(--muted);
   max-width: 70ch;
+}
+
+/* SplitSection layout (shared 2-column system) */
+.splitSection {
+  padding-top: 82px;
+  padding-bottom: 82px;
+}
+.splitContainer {
+  position: relative;
+}
+.anchorShim {
+  position: absolute;
+  inset: -120px auto auto 0;
+  width: 1px;
+  height: 1px;
+}
+.splitInner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 24px;
+  /* Equal-height columns: both sides stretch to the tallest column */
+  align-items: stretch;
+  border-radius: var(--radius-xl);
+  padding: 14px;
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.02), rgba(17, 24, 39, 0.04));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadowXs);
+}
+
+/* About: slightly narrower visual column (cleaner balance) */
+main > section#about.section .splitInner {
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+}
+.splitVisual {
+  position: relative;
+  height: 100%;
+  align-self: stretch;
+}
+.splitContent {
+  /* Let content column “finish” at the same bottom edge as the visual column */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  align-self: stretch;
+}
+.splitHead {
+  display: grid;
+  gap: 6px;
+}
+.splitReverse .splitVisual {
+  order: 2;
+}
+.splitReverse .splitContent {
+  order: 1;
+}
+.splitVisualCard {
+  height: 100%;
+  border-radius: var(--radius-xl);
+  padding: 0;
+  display: flex;
+}
+.splitVisualCard > * {
+  width: 100%;
+}
+
+/* Games section uses the split wrapper, but intentionally hides the visual column */
+.gamesCombined .splitInner {
+  grid-template-columns: 1fr;
+}
+.gamesCombined .splitVisual {
+  display: none;
 }
 
 .cardGrid {
@@ -347,6 +439,21 @@ html.dark .kbd {
   }
 }
 
+/* Stack only on portrait / narrow viewports; keep side-by-side in landscape when possible */
+@media (max-width: 980px) and (orientation: portrait) {
+  .splitInner {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+  /* When stacked, visual goes first */
+  .splitVisual {
+    order: 1;
+  }
+  .splitContent {
+    order: 2;
+  }
+}
+
 /* --- App shell / pages --- */
 .skipLink {
   position: absolute;
@@ -370,6 +477,11 @@ html.dark .kbd {
 
 .page {
   padding: 30px 0 70px 0;
+}
+
+/* Dark-mode-only: News pages should be the darkest surface on the site. */
+html.dark .newsPage {
+  background: #000;
 }
 
 .pageHeader {
@@ -420,7 +532,7 @@ html.dark .kbd {
   position: sticky;
   top: 0;
   z-index: 60;
-  background: var(--surface);
+  background: var(--surface-2);
   border-bottom: 1px solid var(--border);
 }
 html.dark .siteHeader {
@@ -466,6 +578,173 @@ html.dark .siteHeader {
   gap: 10px;
 }
 
+.headerSearch {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.headerSearchInner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.headerSearchInput {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  padding: 10px 0;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text);
+  transition: width 160ms ease, opacity 120ms ease, background 120ms ease, border-color 120ms ease,
+    box-shadow 120ms ease, padding 160ms ease;
+}
+
+.headerSearch.isExpanded .headerSearchInput {
+  width: 240px;
+  opacity: 1;
+  pointer-events: auto;
+  padding: 10px 12px;
+  border-color: var(--border);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+html.dark .headerSearch.isExpanded .headerSearchInput {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.headerSearch.isExpanded:focus-within .headerSearchInput {
+  width: 300px;
+  border-color: rgba(33, 181, 143, 0.26);
+  box-shadow: var(--focus);
+}
+
+.headerSearchInput::placeholder {
+  color: var(--muted2);
+}
+
+.headerSearchInput:focus {
+  outline: none;
+}
+
+.headerSearchPanel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(520px, 92vw);
+  background: var(--surface);
+  border: 1px solid var(--borderStrong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadowMd);
+  overflow: hidden;
+  z-index: 80;
+}
+
+.headerSearchStatus {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--muted2);
+  border-bottom: 1px solid var(--border);
+  background: rgba(17, 24, 39, 0.02);
+}
+html.dark .headerSearchStatus {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.headerSearchList {
+  display: grid;
+}
+
+.headerSearchItem {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  transition: background 120ms ease;
+}
+.headerSearchItem:last-child {
+  border-bottom: 0;
+}
+.headerSearchItem:hover {
+  background: rgba(33, 181, 143, 0.08);
+}
+.headerSearchItem:focus-visible {
+  outline: none;
+  box-shadow: inset var(--focus);
+}
+.headerSearchItem.isPinned {
+  background: rgba(33, 181, 143, 0.06);
+}
+
+.headerSearchItemTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.headerSearchTitle {
+  font-weight: 950;
+  letter-spacing: -0.02em;
+}
+
+.headerSearchMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.headerSearchType {
+  font-size: 12px;
+  color: var(--muted2);
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.55);
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+html.dark .headerSearchType {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.headerSearchPinned {
+  font-size: 12px;
+  color: rgba(33, 181, 143, 0.9);
+  font-weight: 800;
+}
+
+.headerSearchSnippet {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.headerSearchEmpty {
+  padding: 16px 14px;
+}
+.headerSearchEmptyTitle {
+  font-weight: 950;
+  letter-spacing: -0.02em;
+}
+.headerSearchEmptyText {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+@media (max-width: 740px) {
+  .headerSearch.isExpanded .headerSearchInput {
+    width: min(56vw, 220px);
+  }
+  .headerSearch.isExpanded:focus-within .headerSearchInput {
+    width: min(70vw, 280px);
+  }
+}
+
 .siteHeaderIconBtn {
   display: inline-flex;
   align-items: center;
@@ -503,6 +782,9 @@ html.dark .siteHeaderIconBtn {
   box-shadow: none;
   min-width: 0;
 }
+.themeToggleBtn.iconOnly {
+  padding: 10px;
+}
 html.dark .themeToggleBtn {
   background: rgba(255, 255, 255, 0.06);
 }
@@ -513,11 +795,168 @@ html.dark .themeToggleBtn {
   outline: none;
   box-shadow: var(--focus);
 }
-.themeToggleText {
-  font-size: 12px;
-  color: var(--muted2);
+
+/* --- Language Toggle --- */
+.langToggleWrapper {
+  position: relative;
+}
+
+.langToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.40);
+  color: var(--text);
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+html.dark .langToggleBtn {
+  background: rgba(255, 255, 255, 0.06);
+}
+.langToggleBtn:hover {
+  border-color: rgba(33, 181, 143, 0.24);
+}
+.langToggleBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.langToggleFlag {
+  font-size: 20px;
   line-height: 1;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.langDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 280px;
+  background: var(--surface);
+  border: 1px solid var(--borderStrong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadowMd);
+  z-index: 90;
+  overflow: hidden;
+  animation: langDropdownIn 150ms ease;
+}
+
+@keyframes langDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.langDropdownScroll {
+  max-height: 380px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.langDropdownScroll::-webkit-scrollbar {
+  width: 8px;
+}
+.langDropdownScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.langDropdownScroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+.langDropdownScroll::-webkit-scrollbar-thumb:hover {
+  background: var(--borderStrong);
+}
+
+.langDropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 100ms ease;
+  border-bottom: 1px solid var(--border);
+}
+.langDropdownItem:last-child {
+  border-bottom: none;
+}
+.langDropdownItem:hover {
+  background: rgba(33, 181, 143, 0.08);
+}
+.langDropdownItem:focus-visible {
+  outline: none;
+  background: rgba(33, 181, 143, 0.12);
+}
+.langDropdownItem.isSelected {
+  background: rgba(33, 181, 143, 0.10);
+}
+.langDropdownItem.isSelected::after {
+  content: "✓";
+  margin-left: auto;
+  color: var(--accentMint);
+  font-weight: 700;
+}
+
+.langDropdownFlag {
+  font-size: 24px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+}
+html.dark .langDropdownFlag {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.langDropdownName {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.langDropdownEnglish {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.langDropdownNative {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.2;
+}
+
+@media (max-width: 480px) {
+  .langDropdown {
+    width: min(280px, calc(100vw - 40px));
+    right: -40px;
+  }
 }
 
 .siteMobilePanel {

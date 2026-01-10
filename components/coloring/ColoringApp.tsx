@@ -229,7 +229,12 @@ export function ColoringApp() {
             </div>
           </div>
 
-          <div className="canvasWrap" ref={(n) => (wrapRef.current = n)}>
+          <div
+            className="canvasWrap"
+            ref={(n) => {
+              wrapRef.current = n;
+            }}
+          >
             <svg className="template" viewBox={template.viewBox} preserveAspectRatio="xMidYMid meet">
               {template.regions.map((r) => (
                 <path
@@ -245,7 +250,9 @@ export function ColoringApp() {
             </svg>
 
             <canvas
-              ref={(n) => (canvasRef.current = n)}
+              ref={(n) => {
+                canvasRef.current = n;
+              }}
               className="paint"
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}

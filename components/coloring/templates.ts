@@ -121,3 +121,5 @@ export const COLORING_TEMPLATES: ColoringTemplate[] = [
 ];
 
 
+
+

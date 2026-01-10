@@ -17,7 +17,7 @@ export function ThemeToggle() {
 
   return (
     <button
-      className="themeToggleBtn"
+      className="themeToggleBtn iconOnly"
       type="button"
       onClick={() => {
         setMode(nextMode);
@@ -29,7 +29,6 @@ export function ThemeToggle() {
       <span className="themeToggleIcon" aria-hidden="true">
         {mode === "dark" ? <IconMoon /> : <IconSun />}
       </span>
-      <span className="themeToggleText">{mode === "dark" ? "Dark" : "Light"}</span>
     </button>
   );
 }

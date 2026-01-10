@@ -3,7 +3,9 @@
 import Link from "next/link";
 import React from "react";
 import { MascotMark } from "@/components/MascotMark";
+import { HeaderSearch } from "@/components/HeaderSearch";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { IconMenu } from "@/components/icons";
 
 type NavItem = { label: string; href: string };
@@ -50,7 +52,9 @@ export function Header() {
           >
             <IconMenu />
           </button>
+          <LanguageToggle />
           <ThemeToggle />
+          <HeaderSearch />
         </div>
       </div>
 

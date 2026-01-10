@@ -27,6 +27,41 @@ export function LessonChat({
   const [input, setInput] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [offline, setOffline] = React.useState(false);
+  const [offlineReason, setOfflineReason] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    // Best-effort: reflect whether chat is configured before the user hits Send.
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/chat/health", { method: "GET" });
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          ok?: boolean;
+          disabled?: boolean;
+          provider?: string;
+          hasKey?: boolean;
+          model?: string;
+        };
+        if (cancelled) return;
+        const ok = Boolean(data.ok);
+        setOffline(!ok);
+        if (!ok) {
+          if (data.disabled) setOfflineReason("AI chat is disabled on the server (LLM_DISABLED=true).");
+          else if (data.provider && data.provider !== "grok") setOfflineReason(`AI chat provider is misconfigured (LLM_PROVIDER=${data.provider}).`);
+          else if (data.hasKey === false) setOfflineReason("AI chat isn’t configured (missing XAI_API_KEY / GROK_API_KEY).");
+          else setOfflineReason("AI chat is unavailable.");
+        } else {
+          setOfflineReason(null);
+        }
+      } catch {
+        // ignore
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   React.useEffect(() => {
     // When the page changes, gently reset context while keeping the chat.
@@ -44,6 +79,7 @@ export function LessonChat({
     const trimmed = text.trim();
     if (!trimmed || busy) return;
     setOffline(false);
+    setOfflineReason(null);
     setBusy(true);
 
     const nextMsgs: UiMsg[] = [...messages, { role: "user", content: trimmed }];
@@ -66,12 +102,33 @@ export function LessonChat({
 
       if (!res.ok) {
         setOffline(true);
+        let detail = "";
+        let hint = "";
+        try {
+          const err = (await res.json()) as { detail?: string; hint?: string };
+          detail = (err.detail ?? "").trim();
+          hint = (err.hint ?? "").trim();
+        } catch {
+          // ignore
+        }
+
+        const configuredMsg =
+          detail.includes("Missing XAI_API_KEY") || detail.includes("Missing GROK_API_KEY")
+            ? "AI isn’t configured on the server yet (missing API key). Set XAI_API_KEY (or GROK_API_KEY) and redeploy."
+            : "";
+        const upstreamMsg = detail.startsWith("Grok API error")
+          ? `The AI provider returned an error. ${detail}`
+          : "";
+        const next =
+          configuredMsg ||
+          upstreamMsg ||
+          "AI is unavailable right now. You can still use the lesson pages. Tip: ask me again later, or use the page text on the left and I’ll help you make a checklist.";
+        setOfflineReason(configuredMsg || upstreamMsg || null);
         setMessages((prev) => [
           ...prev,
           {
             role: "assistant",
-            content:
-              "AI is unavailable right now. You can still use the lesson pages. Tip: ask me again later, or use the page text on the left and I’ll help you make a checklist."
+            content: hint ? `${next}\n\nTip: ${hint}` : next
           }
         ]);
         return;
@@ -82,6 +139,7 @@ export function LessonChat({
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch {
       setOffline(true);
+      setOfflineReason("Network error talking to /api/chat.");
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: "AI is unavailable right now. Try again in a bit." }
@@ -98,7 +156,13 @@ export function LessonChat({
           <div className="kicker">AI Guide</div>
           <div className="titleRow">
             <div className="title">Grok (swappable)</div>
-            {offline ? <span className="badge">Offline</span> : <span className="badge ok">Online</span>}
+            {offline ? (
+              <span className="badge" title={offlineReason ?? undefined}>
+                Offline
+              </span>
+            ) : (
+              <span className="badge ok">Online</span>
+            )}
           </div>
           <div className="sub muted">
             Lesson: <strong>{lessonTitle}</strong>

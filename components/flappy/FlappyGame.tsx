@@ -277,7 +277,9 @@ export function FlappyGame() {
         <div className="stage card">
           <div className={state === "over" ? "veil show" : "veil"} aria-hidden="true" />
           <canvas
-            ref={(n) => (canvasRef.current = n)}
+            ref={(n) => {
+              canvasRef.current = n;
+            }}
             className="canvas"
             onPointerDown={() => (state === "over" ? undefined : flap())}
           />
