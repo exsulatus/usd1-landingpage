@@ -214,8 +214,11 @@ export function LessonChat({
       <style jsx>{`
         .chat {
           padding: 16px;
-          display: grid;
+          display: flex;
+          flex-direction: column;
           gap: 12px;
+          height: 100%;
+          min-height: 0;
         }
         .head {
           display: flex;
@@ -224,6 +227,7 @@ export function LessonChat({
           gap: 10px;
           border-bottom: 1px dashed var(--border);
           padding-bottom: 12px;
+          flex-shrink: 0;
         }
         .kicker {
           font-size: 12px;
@@ -258,9 +262,11 @@ export function LessonChat({
         .msgs {
           display: grid;
           gap: 10px;
-          max-height: 46vh;
-          overflow: auto;
+          flex: 1;
+          min-height: 0;
+          overflow-y: auto;
           padding-right: 4px;
+          scrollbar-width: thin;
         }
         .msg {
           display: flex;

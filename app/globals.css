@@ -2,6 +2,8 @@
   /* --- Layout --- */
   --container: 1200px;
   --containerWide: 1320px;
+  --pagePadTop: 30px;
+  --pagePadBottom: 70px;
 
   /* --- Typography --- */
   /* Friendly + simple. Let spacing do the hierarchy, not decoration. */
@@ -476,7 +478,7 @@ html.dark .kbd {
 }
 
 .page {
-  padding: 30px 0 70px 0;
+  padding: var(--pagePadTop) 0 var(--pagePadBottom) 0;
 }
 
 /* Dark-mode-only: News pages should be the darkest surface on the site. */
