@@ -31,6 +31,9 @@ export type CategoryMeta = {
   accent: "mint" | "lavender" | "coral";
 };
 
+// Re-export series types from data layer for convenience
+export type { Series, SeriesLesson } from "@/data/series";
+
 
 
 

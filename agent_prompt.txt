@@ -1,0 +1,102 @@
+You are working in a Next.js (App Router) repo: USD1.edu.
+
+FIRST ACTION (MANDATORY):
+- Create and switch to a new git branch named:
+  learn-series-river
+- Do all work on this branch only.
+- Do NOT modify the main branch.
+
+HIGH-LEVEL UX FLOW (SPEC — MUST FOLLOW EXACTLY):
+1) From the landing page, clicking “Learn” routes to /learn (LEARN DIRECTORY).
+   - /learn shows ALL SERIES as cards (grid or list).
+   - Cards can be placeholders (title + short description).
+   - This page is NOT a river.
+
+2) Clicking a SERIES card routes to:
+   /learn/series/[seriesSlug]
+   - This is the SERIES PAGE.
+   - It shows a RIVER UI where each stepping stone represents a LESSON in that series.
+   - Stepping stones are ordered (lesson 1, lesson 2, ...).
+   - Clicking a stepping stone navigates to that lesson.
+
+3) Clicking a lesson stepping stone routes to:
+   /learn/series/[seriesSlug]/[lessonSlug]
+   - This is the LESSON PAGE.
+   - Preserve the existing LessonShell layout:
+     - left = lesson content
+     - right = AI chat panel
+   - Add INTERNAL PAGE NAVIGATION so the user can move page-by-page
+     WITHOUT returning to the river:
+       - Prev / Next buttons
+       - “Page X of Y”
+       - Optional compact page list
+   - The river must NOT be used for paging inside a lesson.
+
+4) The lesson page must include a clear “Back to river” control that
+   returns to the correct series river page.
+
+SERIES COLOR REQUIREMENTS:
+- Each SERIES must have its own distinct accent color.
+- These colors must:
+  - Fit the existing dark aesthetic
+  - Be cohesive with each other
+  - Be DIFFERENT from the existing mint / lavender / peach palette
+- Series color must be stored as data (e.g. in series metadata).
+- Apply the series color to:
+  - Series card accents
+  - Series river active/highlight states
+  - Optional small accents on series headers
+- Do NOT change global theme styles.
+- Use CSS variables or scoped Tailwind classes if needed.
+
+ROUTING REQUIREMENTS:
+- /learn → series directory
+- /learn/series/[seriesSlug] → series river of lessons
+- /learn/series/[seriesSlug]/[lessonSlug] → lesson view
+- Lesson page must support deep linking to pages:
+  - Use ?page=1 OR /page/1 (pick the simplest and be consistent)
+- “Back to river” must return to /learn/series/[seriesSlug]
+
+DATA / MODEL REQUIREMENTS (PLACEHOLDERS OK):
+- Create a simple in-repo placeholder data source (TypeScript file) for:
+  - series: slug, title, description, color, ordered lesson slugs
+  - lessons: slug, title, pages (array of page title + placeholder content)
+- Store this in data/ or content/.
+- No real lesson text required yet.
+
+CONSTRAINTS (NON-NEGOTIABLE):
+- DO NOT touch the homepage / landing page layout or styling.
+- DO NOT redesign the site theme.
+- Avoid global CSS changes unless strictly required for Learn navigation.
+- Keep changes minimal and explainable.
+- Preserve the current LessonShell look and structure.
+- Assume lesson content is placeholder; focus on navigation and structure.
+
+WORKFLOW (RUN FULLY AUTOMATED — DO NOT PAUSE FOR APPROVAL):
+A) BEFORE EDITING FILES:
+   1) Summarize your understanding of the CURRENT Learn → series → lesson flow
+      and why it is confusing today.
+   2) List the exact files, components, and routes you will touch (with paths).
+   3) Provide a step-by-step implementation plan (5–12 steps max).
+
+B) THEN EXECUTE THE PLAN AUTOMATICALLY:
+   - Implement changes in small logical steps.
+   - After each step, print a brief progress note listing edited files.
+   - Do NOT ask the user to approve between steps.
+
+C) AFTER IMPLEMENTATION:
+   - Run repo checks (lint / typecheck / build or closest equivalents).
+   - Report results.
+   - Fix any failures.
+
+SEARCH TARGETS (YOU SHOULD LOOK FOR THESE):
+- app/learn routes
+- components/LessonShell.tsx
+- components/LessonChat.tsx
+- components/RiverPath.tsx
+- components/WindingRiver.tsx
+- existing series / lesson data in content/ or data/
+
+START NOW.
+Begin with step A (summary + files + plan), then proceed through B and C
+without waiting for user confirmation.
