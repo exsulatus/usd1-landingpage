@@ -26,9 +26,7 @@ export function ThemeToggle() {
       }}
       aria-label={`Switch to ${nextMode} mode`}
     >
-      <span className="themeToggleIcon" aria-hidden="true">
-        {mode === "dark" ? <IconMoon /> : <IconSun />}
-      </span>
+      {mode === "dark" ? <IconMoon size={20} /> : <IconSun size={20} />}
     </button>
   );
 }

@@ -47,6 +47,7 @@ export function Footer() {
   const [overlayMounted, setOverlayMounted] = React.useState(false);
   const [openFaqId, setOpenFaqId] = React.useState<string | null>(null);
   const closeBtnRef = React.useRef<HTMLButtonElement | null>(null);
+  const [slippageOpen, setSlippageOpen] = React.useState(false);
 
   const isOverlayOpen = overlay !== "none";
 
@@ -82,6 +83,7 @@ export function Footer() {
 
   React.useEffect(() => {
     if (overlay !== "faq") setOpenFaqId(null);
+    setSlippageOpen(false);
   }, [overlay]);
 
   const faqItems = React.useMemo(
@@ -325,65 +327,106 @@ export function Footer() {
                       </p>
                     </div>
 
-                    <div className="howToGrid">
-                      <div className="howToSteps">
-                        <h4 className="overlaySectionTitle">Steps</h4>
-                        <ol className="overlayOl">
-                          <li>Get a Solana wallet (Phantom, Solflare, etc.).</li>
-                          <li>Fund it with a small amount of SOL (fees + swap).</li>
-                          <li>
-                            Use{" "}
-                            <a
-                              href="https://jup.ag"
-                              target="_blank"
-                              rel="noreferrer"
-                              className="overlayLink"
-                            >
-                              Jupiter
-                            </a>{" "}
-                            to swap SOL → USD1.
-                          </li>
-                          <li>Verify the contract address from official sources.</li>
-                          <li>
-                            Cross-check on{" "}
-                            <a
-                              href="https://solscan.io/"
-                              target="_blank"
-                              rel="noreferrer"
-                              className="overlayLink"
-                            >
-                              Solscan
-                            </a>{" "}
-                            and{" "}
-                            <a
-                              href="https://dexscreener.com/solana"
-                              target="_blank"
-                              rel="noreferrer"
-                              className="overlayLink"
-                            >
-                              DexScreener
-                            </a>
-                            .
-                          </li>
-                        </ol>
+                    <div className="howToFlow">
+                      <div className="howToCard howToCard--steps">
+                        <h4 className="overlaySectionLabel">Steps</h4>
+                        <div className="stepTimeline">
+                          <div className="stepRow">
+                            <span className="stepNum">1</span>
+                            <span className="stepText">Get a Solana wallet (Phantom, Solflare, etc.).</span>
+                          </div>
+                          <div className="stepRow">
+                            <span className="stepNum">2</span>
+                            <span className="stepText">Fund it with SOL — you&apos;ll need enough for fees and the swap itself.</span>
+                          </div>
+                          <div className="stepRow">
+                            <span className="stepNum">3</span>
+                            <span className="stepText">
+                              Use{" "}
+                              <a href="https://jup.ag" target="_blank" rel="noreferrer" className="overlayLink">
+                                Jupiter
+                              </a>{" "}
+                              to swap SOL → USD1.
+                            </span>
+                          </div>
+                          <div className="stepRow">
+                            <span className="stepNum">4</span>
+                            <span className="stepText">Verify the contract address from official sources.</span>
+                          </div>
+                          <div className="stepRow">
+                            <span className="stepNum">5</span>
+                            <span className="stepText">
+                              Cross-check on{" "}
+                              <a href="https://solscan.io/" target="_blank" rel="noreferrer" className="overlayLink">
+                                Solscan
+                              </a>{" "}
+                              and{" "}
+                              <a href="https://dexscreener.com/solana" target="_blank" rel="noreferrer" className="overlayLink">
+                                DexScreener
+                              </a>
+                              .
+                            </span>
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="howToSafety">
-                        <h4 className="overlaySectionTitle">Safety checks</h4>
-                        <ul className="overlayUl">
-                          <li>
-                            <strong>Verify the contract address</strong> in at least two trusted places
-                            (site + Solscan, or announcements + DexScreener).
-                          </li>
-                          <li>
-                            <strong>Avoid fake links</strong>: ignore random DMs/replies; use bookmarks and
-                            official channels.
-                          </li>
-                          <li>
-                            <strong>Slippage basics</strong>: if price is moving fast, slippage can spike
-                            —start small and understand what you’re approving.
-                          </li>
-                        </ul>
+                      <div className="howToCard howToCard--safety">
+                        <h4 className="overlaySectionLabel">Safety checks</h4>
+                        <div className="safetyList">
+                          <div className="safetyItem">
+                            <span className="safetyDot" />
+                            <span className="safetyText">
+                              <strong>Verify the contract address</strong> in at least two trusted places
+                              (site + Solscan, or announcements + DexScreener).
+                            </span>
+                          </div>
+                          <div className="safetyItem">
+                            <span className="safetyDot" />
+                            <span className="safetyText">
+                              <strong>Avoid fake links</strong>: ignore random DMs/replies; use bookmarks and
+                              official channels.
+                            </span>
+                          </div>
+                          <div className="safetyItem">
+                            <span className="safetyDot" />
+                            <span className="safetyText">
+                              <strong>Slippage</strong>: if price is moving fast, slippage can spike
+                              —set a reasonable tolerance and understand what you’re approving.
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="slippageWrap">
+                          <button
+                            type="button"
+                            className={`slippageToggle ${slippageOpen ? "isOpen" : ""}`}
+                            onClick={() => setSlippageOpen((v) => !v)}
+                            aria-expanded={slippageOpen}
+                          >
+                            <span className="slippageToggleLabel">What is slippage?</span>
+                            <span className="slippageChevron" aria-hidden="true">▾</span>
+                          </button>
+                          {slippageOpen && (
+                            <div className="slippageBody">
+                              <p>
+                                <strong>Slippage</strong> is the difference between the price you expect
+                                for a trade and the price you actually get. It happens because prices
+                                move between the moment you submit a swap and the moment it executes on-chain.
+                              </p>
+                              <p>
+                                In thin or fast-moving markets—common with memecoins—slippage can be
+                                significant. Most swap interfaces let you set a{" "}
+                                <strong>slippage tolerance</strong> (e.g.&nbsp;0.5–3%). If the price moves
+                                more than your tolerance, the transaction reverts instead of executing
+                                at a worse price.
+                              </p>
+                              <p className="slippageMuted">
+                                Lower tolerance = more protection but more failed txs. Higher tolerance =
+                                more likely to fill but worse possible price. Start conservative and adjust.
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
 
@@ -732,48 +775,229 @@ export function Footer() {
         }
 
         /* How-to */
-        .howToGrid {
+        .howToFlow {
           display: grid;
           grid-template-columns: 1.4fr 1fr;
           gap: 18px;
           align-items: start;
         }
 
-        .howToSteps,
-        .howToSafety {
+        .howToCard {
           border: 1px solid var(--border);
           background: var(--surface-2);
           border-radius: 18px;
-          padding: 16px;
+          padding: 24px;
+          position: relative;
+          overflow: hidden;
         }
 
-        .overlaySectionTitle {
-          margin: 0 0 10px 0;
-          font-size: 13px;
+        .howToCard::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 24px;
+          width: 36px;
+          height: 3px;
+          border-radius: 0 0 4px 4px;
+        }
+
+        .howToCard--steps::before {
+          background: #21b58f;
+        }
+
+        .howToCard--safety::before {
+          background: #ff7a6b;
+        }
+
+        .overlaySectionLabel {
+          margin: 0 0 16px 0;
+          font-size: 12px;
           font-weight: 800;
           text-transform: uppercase;
           letter-spacing: 0.12em;
           color: var(--muted2);
         }
 
-        .overlayOl {
-          margin: 0;
-          padding-left: 18px;
-          display: grid;
-          gap: 10px;
-          color: var(--muted);
-          font-size: 15px;
-          line-height: 1.45;
+        /* Step timeline */
+        .stepTimeline {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
         }
 
-        .overlayUl {
-          margin: 0;
-          padding-left: 18px;
-          display: grid;
-          gap: 10px;
-          color: var(--muted);
+        .stepRow {
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+          padding: 11px 0;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .stepRow:first-child {
+          padding-top: 0;
+        }
+
+        .stepRow:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+
+        .stepNum {
+          flex-shrink: 0;
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          background: rgba(33, 181, 143, 0.10);
+          color: #21b58f;
+          font-size: 13px;
+          font-weight: 800;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          letter-spacing: 0;
+        }
+
+        :global(html.dark) .stepNum {
+          background: rgba(33, 181, 143, 0.18);
+          color: #3bc9a4;
+        }
+
+        .stepText {
           font-size: 15px;
-          line-height: 1.45;
+          line-height: 1.5;
+          color: var(--muted);
+          padding-top: 3px;
+        }
+
+        /* Safety list */
+        .safetyList {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+        }
+
+        .safetyItem {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          padding: 11px 0;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .safetyItem:first-child {
+          padding-top: 0;
+        }
+
+        .safetyItem:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+
+        .safetyDot {
+          flex-shrink: 0;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #ff7a6b;
+          margin-top: 7px;
+        }
+
+        :global(html.dark) .safetyDot {
+          background: #ff9488;
+        }
+
+        .safetyText {
+          font-size: 15px;
+          line-height: 1.5;
+          color: var(--muted);
+        }
+
+        /* Slippage expandable */
+        .slippageWrap {
+          margin-top: 16px;
+          padding-top: 16px;
+          border-top: 1px solid var(--border);
+        }
+
+        .slippageToggle {
+          appearance: none;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          padding: 10px 14px;
+          background: rgba(33, 181, 143, 0.06);
+          border: 1px solid rgba(33, 181, 143, 0.14);
+          border-radius: 12px;
+          cursor: pointer;
+          transition: background 140ms ease, border-color 140ms ease;
+        }
+
+        .slippageToggle:hover {
+          background: rgba(33, 181, 143, 0.10);
+          border-color: rgba(33, 181, 143, 0.22);
+        }
+
+        .slippageToggle:focus-visible {
+          outline: none;
+          box-shadow: var(--focus);
+        }
+
+        :global(html.dark) .slippageToggle {
+          background: rgba(33, 181, 143, 0.08);
+          border-color: rgba(33, 181, 143, 0.18);
+        }
+
+        :global(html.dark) .slippageToggle:hover {
+          background: rgba(33, 181, 143, 0.12);
+          border-color: rgba(33, 181, 143, 0.26);
+        }
+
+        .slippageToggleLabel {
+          font-size: 14px;
+          font-weight: 700;
+          color: #21b58f;
+          letter-spacing: -0.01em;
+        }
+
+        :global(html.dark) .slippageToggleLabel {
+          color: #3bc9a4;
+        }
+
+        .slippageChevron {
+          color: #21b58f;
+          font-size: 14px;
+          transition: transform 160ms ease;
+        }
+
+        :global(html.dark) .slippageChevron {
+          color: #3bc9a4;
+        }
+
+        .slippageToggle.isOpen .slippageChevron {
+          transform: rotate(180deg);
+        }
+
+        .slippageBody {
+          padding: 16px 2px 4px 2px;
+        }
+
+        .slippageBody p {
+          margin: 0 0 12px 0;
+          font-size: 14px;
+          line-height: 1.6;
+          color: var(--muted);
+        }
+
+        .slippageBody p:last-child {
+          margin-bottom: 0;
+        }
+
+        .slippageMuted {
+          font-size: 13px !important;
+          color: var(--muted2) !important;
+          font-style: italic;
         }
 
         .overlayLink {
@@ -787,12 +1011,6 @@ export function Footer() {
         .overlayLink:hover {
           color: var(--text);
           text-decoration-color: var(--borderStrong);
-        }
-
-        .overlayActions {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
         }
 
         /* Responsive */
@@ -822,7 +1040,7 @@ export function Footer() {
             gap: 24px;
           }
 
-          .howToGrid {
+          .howToFlow {
             grid-template-columns: 1fr;
           }
         }

@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "USD1.edu: Dev server (localhost:3000)",
+      "type": "shell",
+      "command": "npm run dev:3000",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "USD1.edu: Dev server MAIN (localhost:3001)",
+      "type": "shell",
+      "command": "npm run dev:stable -- -p 3001",
+      "options": {
+        "cwd": "/Users/gg/Vibecoding/USD1.edu-main"
+      },
+      "problemMatcher": [],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    }
+  ]
+}
