@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { I18nProvider } from "@/lib/i18n/context";
 
 export const metadata: Metadata = {
   title: "UnicornSheepDog1 (USD1) — Learn money, simply",
@@ -16,14 +15,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <I18nProvider>
-          <a className="skipLink" href="#main">
-            Skip to content
-          </a>
-          <Header />
-          <main id="main">{children}</main>
-          <Footer />
-        </I18nProvider>
+        <a className="skipLink" href="#main">
+          Skip to content
+        </a>
+        <Header />
+        <main id="main">{children}</main>
+        <Footer />
       </body>
     </html>
   );
