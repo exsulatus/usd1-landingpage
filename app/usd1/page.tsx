@@ -28,48 +28,52 @@ const LINKS = {
 const TEAM = [
   {
     initials: "PL",
-    name: "Project Lead",
+    name: "Exs",
     title: "Strategy & Vision",
     desc: "Drives direction, coordinates development, and guides community growth.",
     accent: "var(--accentMint)",
     tint: "var(--tintMint)",
+    pfp: "/images/pfp.exs.jpeg",
   },
   {
     initials: "LD",
-    name: "Lead Developer",
-    title: "On-chain Infrastructure",
-    desc: "Builds, maintains, and verifies the smart contract and tooling layer.",
+    name: "Genie",
+    title: "Art & Identity",
+    desc: "Creates memes, visual assets, and the overall brand aesthetic.",
     accent: "var(--accentLavender)",
     tint: "var(--tintLavender)",
+    pfp: "/images/pfp.genie.jpeg",
   },
   {
     initials: "CM",
-    name: "Community Manager",
+    name: "Duck",
     title: "Community & Socials",
     desc: "Nurtures the community, moderates channels, and surfaces feedback.",
     accent: "var(--accentCoral)",
     tint: "var(--tintCoral)",
+    pfp: "/images/pfp.duck.jpeg",
   },
   {
     initials: "CD",
-    name: "Creative Director",
-    title: "Art & Identity",
-    desc: "Creates memes, visual assets, and the overall brand aesthetic.",
+    name: "Bubba",
+    title: "On-chain Infrastructure",
+    desc: "Builds, maintains, and verifies the smart contract and tooling layer.",
     accent: "var(--accentMint)",
     tint: "var(--tintMint)",
+    pfp: "/images/pfp.bubba.jpeg",
   },
 ];
 
 const MEMES = [
-  { id: 1, accent: "var(--accentMint)", glow: "rgba(33,181,143,0.22)", glowFocus: "rgba(33,181,143,0.50)", label: "Meme #1" },
-  { id: 2, accent: "var(--accentLavender)", glow: "rgba(123,108,255,0.22)", glowFocus: "rgba(123,108,255,0.50)", label: "Meme #2" },
-  { id: 3, accent: "var(--accentCoral)", glow: "rgba(255,122,107,0.22)", glowFocus: "rgba(255,122,107,0.50)", label: "Meme #3" },
-  { id: 4, accent: "var(--accentMint)", glow: "rgba(33,181,143,0.22)", glowFocus: "rgba(33,181,143,0.50)", label: "Meme #4" },
-  { id: 5, accent: "var(--accentLavender)", glow: "rgba(123,108,255,0.22)", glowFocus: "rgba(123,108,255,0.50)", label: "Meme #5" },
-  { id: 6, accent: "var(--accentCoral)", glow: "rgba(255,122,107,0.22)", glowFocus: "rgba(255,122,107,0.50)", label: "Meme #6" },
-  { id: 7, accent: "var(--accentMint)", glow: "rgba(33,181,143,0.22)", glowFocus: "rgba(33,181,143,0.50)", label: "Meme #7" },
-  { id: 8, accent: "var(--accentLavender)", glow: "rgba(123,108,255,0.22)", glowFocus: "rgba(123,108,255,0.50)", label: "Meme #8" },
-  { id: 9, accent: "var(--accentCoral)", glow: "rgba(255,122,107,0.22)", glowFocus: "rgba(255,122,107,0.50)", label: "Meme #9" },
+  { id: 1, accent: "var(--accentMint)", glow: "rgba(33,181,143,0.22)", glowFocus: "rgba(33,181,143,0.50)", label: "Legendary", src: "/images/memes/usd1.legendary.jpg" },
+  { id: 2, accent: "var(--accentLavender)", glow: "rgba(123,108,255,0.22)", glowFocus: "rgba(123,108,255,0.50)", label: "Architect", src: "/images/memes/usd1.architect.jpg" },
+  { id: 3, accent: "var(--accentCoral)", glow: "rgba(255,122,107,0.22)", glowFocus: "rgba(255,122,107,0.50)", label: "Executive Orders", src: "/images/memes/usd1.executiveorders.jpg" },
+  { id: 4, accent: "var(--accentMint)", glow: "rgba(33,181,143,0.22)", glowFocus: "rgba(33,181,143,0.50)", label: "USD1 Tower", src: "/images/memes/usd1.usd1tower.jpg" },
+  { id: 5, accent: "var(--accentLavender)", glow: "rgba(123,108,255,0.22)", glowFocus: "rgba(123,108,255,0.50)", label: "Phoenix", src: "/images/memes/usd1.phoenix.jpg" },
+  { id: 6, accent: "var(--accentCoral)", glow: "rgba(255,122,107,0.22)", glowFocus: "rgba(255,122,107,0.50)", label: "Rocky Shhh", src: "/images/memes/usd1.rockyshhh.jpg" },
+  { id: 7, accent: "var(--accentMint)", glow: "rgba(33,181,143,0.22)", glowFocus: "rgba(33,181,143,0.50)", label: "Ricky Bobby", src: "/images/memes/usd1.rickybobby.jpg" },
+  { id: 8, accent: "var(--accentLavender)", glow: "rgba(123,108,255,0.22)", glowFocus: "rgba(123,108,255,0.50)", label: "Top Gun", src: "/images/memes/usd1.topgun.thumbsup.jpg" },
+  { id: 9, accent: "var(--accentCoral)", glow: "rgba(255,122,107,0.22)", glowFocus: "rgba(255,122,107,0.50)", label: "Spiderman Bonk", src: "/images/memes/usd1.spidermanbonk.jpg" },
 ];
 const MEME_COUNT = MEMES.length;
 const MEME_ANGLE = 360 / MEME_COUNT; // 40deg per item
@@ -167,12 +171,12 @@ export default function Usd1Page() {
           </div>
 
           <div className="u1HeroVisual">
-            <div className="u1HeroPlaceholder" aria-label="Meme image placeholder">
-              <span className="u1PlaceholderIcon" aria-hidden="true">
-                🦄🐑🐕
-              </span>
-              <span className="u1PlaceholderText">Meme image</span>
-            </div>
+            <img
+              src="/images/memes/usd1.hero.png"
+              alt="UnicornSheepDog1"
+              className="u1HeroImg"
+              draggable={false}
+            />
           </div>
         </div>
       </section>
@@ -407,7 +411,13 @@ export default function Usd1Page() {
                     } as React.CSSProperties}
                   >
                     <div className="u1MemeInner">
-                      <span className="u1MemeLabel">{m.label}</span>
+                      <img
+                        src={m.src}
+                        alt={m.label}
+                        className="u1MemeImg"
+                        loading={i < 3 ? "eager" : "lazy"}
+                        draggable={false}
+                      />
                     </div>
                   </div>
                 );
@@ -446,6 +456,17 @@ export default function Usd1Page() {
               &#8250;
             </button>
           </div>
+
+          <a
+            href="https://t.me/USD1_Memes"
+            target="_blank"
+            rel="noreferrer"
+            className="u1GalleryLink"
+            style={{ color: MEMES[activeIndex].accent } as React.CSSProperties}
+            aria-label="View full meme gallery on Telegram (opens in new tab)"
+          >
+            View full gallery on Telegram &#8599;
+          </a>
         </div>
       </section>
 
@@ -552,7 +573,7 @@ export default function Usd1Page() {
                 } as React.CSSProperties}
               >
                 <div className="u1Avatar">
-                  <span className="u1AvatarInitials">{member.initials}</span>
+                  <img src={member.pfp} alt={member.name} className="u1AvatarImg" draggable={false} />
                 </div>
                 <div className="u1TeamInfo">
                   <span className="u1TeamName">{member.name}</span>
@@ -701,35 +722,19 @@ export default function Usd1Page() {
           font-style: italic;
         }
 
-        /* Hero visual placeholder */
+        /* Hero visual */
         .u1HeroVisual {
           display: flex;
           align-items: center;
           justify-content: center;
         }
-        .u1HeroPlaceholder {
+        .u1HeroImg {
           width: 100%;
-          aspect-ratio: 1;
           max-width: 380px;
           border-radius: var(--radius-xl);
-          background: rgba(255,255,255,0.45);
-          border: 2px dashed var(--border);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-        }
-        :global(html.dark) .u1HeroPlaceholder {
-          background: rgba(255,255,255,0.05);
-        }
-        .u1PlaceholderIcon {
-          font-size: 48px;
-        }
-        .u1PlaceholderText {
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--muted2);
+          object-fit: cover;
+          display: block;
+          box-shadow: 0 8px 32px rgba(17, 24, 39, 0.18);
         }
 
         /* ─── Quick Links ─── */
@@ -1285,6 +1290,7 @@ export default function Usd1Page() {
           border-radius: var(--radius-xl);
           background: transparent;
           border: 2px solid var(--meme-accent);
+          overflow: hidden;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1299,14 +1305,11 @@ export default function Usd1Page() {
                       0 0 12px 3px var(--meme-glow),
                       inset 0 0 14px 4px var(--meme-glow);
         }
-        .u1MemeLabel {
-          font-size: 14px;
-          font-weight: 700;
-          color: var(--muted2);
-          transition: color 0.4s ease;
-        }
-        .u1RevolveFocus .u1MemeLabel {
-          color: var(--text);
+        .u1MemeImg {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
         }
 
         /* Controls below the carousel */
@@ -1368,6 +1371,24 @@ export default function Usd1Page() {
           background: var(--dot-accent);
           transform: scale(1.4);
           box-shadow: 0 0 6px 2px var(--dot-accent);
+        }
+
+        /* Gallery link */
+        .u1GalleryLink {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+          margin-top: 18px;
+          width: 100%;
+          text-align: center;
+          font-size: 13px;
+          font-weight: 650;
+          text-decoration: none;
+          transition: color 0.8s ease, opacity 140ms ease;
+        }
+        .u1GalleryLink:hover {
+          opacity: 0.75;
         }
 
         /* ────────────────────────────────────────────
@@ -1605,18 +1626,17 @@ export default function Usd1Page() {
           width: 56px;
           height: 56px;
           border-radius: 50%;
-          background: var(--team-tint);
-          border: 2px solid var(--team-accent);
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          border: 2.5px solid var(--team-accent);
+          overflow: hidden;
           flex: 0 0 auto;
+          background: var(--team-tint);
         }
-        .u1AvatarInitials {
-          font-size: 17px;
-          font-weight: 900;
-          letter-spacing: -0.02em;
-          color: var(--team-accent);
+        .u1AvatarImg {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          border-radius: 50%;
         }
         .u1TeamInfo {
           display: flex;
@@ -1650,7 +1670,7 @@ export default function Usd1Page() {
           }
           .u1HeroTitle { font-size: 40px; }
           .u1HeroVisual { order: -1; }
-          .u1HeroPlaceholder { max-width: 260px; }
+          .u1HeroImg { max-width: 260px; }
           .u1AboutHeadline { font-size: 34px; }
           .u1SupplyRow { flex-direction: column; }
           .u1SupplyDivider { width: 100%; height: 1px; }
@@ -1725,7 +1745,7 @@ export default function Usd1Page() {
         }
 
         @media (max-width: 600px) {
-          .u1HeroPlaceholder { max-width: 200px; }
+          .u1HeroImg { max-width: 200px; }
           .u1BreakdownItem { flex-wrap: wrap; }
           .u1BreakdownLine { display: none; }
           .u1BreakdownVal { margin-left: auto; }

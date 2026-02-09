@@ -5,36 +5,54 @@ import Link from "next/link";
 
 export function MascotMark() {
   return (
-    <Link href="/" className="mark" aria-label="UnicornSheepDog1 home">
-      <div className="art" aria-hidden="true">
-        <Image src="/mascot/mark.svg" alt="" width={54} height={54} priority />
-      </div>
-      <div className="word">
-        <span className="name">UnicornSheepDog1</span>
-        <span className="tag">USD1</span>
-      </div>
+    <Link href="/" className="markLink" aria-label="UnicornSheepDog1 home">
+      <span className="mark">
+        <span className="art" aria-hidden="true">
+          <Image src="/images/usd1.base.jpg" alt="" width={54} height={54} priority />
+        </span>
+        <span className="word">
+          <span className="name">UnicornSheepDog1</span>
+          <span className="tag">USD1</span>
+        </span>
+      </span>
       <style jsx>{`
+        .markLink {
+          color: var(--text);
+          text-decoration: none;
+        }
         .mark {
           display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
           align-items: center;
           gap: 12px;
-          color: var(--text);
           min-width: 220px;
         }
         .art {
           width: 54px;
           height: 54px;
-          flex: 0 0 auto;
-          filter: drop-shadow(0 6px 12px rgba(17, 24, 39, 0.14));
-          transition: transform 160ms ease, filter 160ms ease;
+          flex: 0 0 54px;
+          border-radius: 50%;
+          overflow: hidden;
+          background: #0a0a0a;
+          box-shadow: 0 2px 8px rgba(17, 24, 39, 0.10);
+          transition: transform 160ms ease, box-shadow 160ms ease;
           transform: translateY(0);
+          display: block;
         }
-        .mark:hover .art {
+        .art :global(img) {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+        .markLink:hover .art {
           transform: translateY(-2px) rotate(-2deg);
-          filter: drop-shadow(0 10px 18px rgba(17, 24, 39, 0.16));
+          box-shadow: 0 6px 14px rgba(17, 24, 39, 0.14);
         }
         .word {
-          display: grid;
+          display: flex;
+          flex-direction: column;
           gap: 2px;
           line-height: 1.05;
         }
@@ -42,9 +60,6 @@ export function MascotMark() {
           font-weight: 800;
           letter-spacing: -0.02em;
           font-size: 18px;
-        }
-        .mark:hover .name {
-          color: var(--text);
         }
         .tag {
           font-size: 12px;

@@ -59,7 +59,17 @@ const TEAM = [
   }
 ];
 
-const MEME_PLACEHOLDERS = Array(4).fill(null);
+const MEME_IMAGES = [
+  { src: "/images/memes/usd1.legendary.jpg", alt: "USD1 Legendary" },
+  { src: "/images/memes/usd1.architect.jpg", alt: "USD1 Architect" },
+  { src: "/images/memes/usd1.executiveorders.jpg", alt: "USD1 Executive Orders" },
+  { src: "/images/memes/usd1.usd1tower.jpg", alt: "USD1 Tower" },
+  { src: "/images/memes/usd1.phoenix.jpg", alt: "USD1 Phoenix" },
+  { src: "/images/memes/usd1.rockyshhh.jpg", alt: "USD1 Rocky Shhh" },
+  { src: "/images/memes/usd1.rickybobby.jpg", alt: "USD1 Ricky Bobby" },
+  { src: "/images/memes/usd1.topgun.thumbsup.jpg", alt: "USD1 Top Gun Thumbs Up" },
+  { src: "/images/memes/usd1.spidermanbonk.jpg", alt: "USD1 Spiderman Bonk" },
+];
 
 export default function USD1Client() {
   const [copied, setCopied] = React.useState(false);
@@ -260,11 +270,15 @@ export default function USD1Client() {
             <p className="sectionLead">Community-created content and artwork</p>
             
             <div className="usd1MemeCarousel">
-              {MEME_PLACEHOLDERS.map((_, i) => (
+              {MEME_IMAGES.map((meme, i) => (
                 <div key={i} className="card usd1MemeCard">
-                  <div className="usd1MemeCardInner">
-                    <span className="placeholderLabel">Meme #{i + 1}</span>
-                  </div>
+                  <img
+                    src={meme.src}
+                    alt={meme.alt}
+                    className="usd1MemeImg"
+                    loading={i < 4 ? "eager" : "lazy"}
+                    draggable={false}
+                  />
                 </div>
               ))}
             </div>
@@ -686,13 +700,11 @@ export default function USD1Client() {
           aspect-ratio: 1;
         }
 
-        .usd1MemeCardInner {
+        .usd1MemeImg {
           width: 100%;
           height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: rgba(17, 24, 39, 0.02);
+          object-fit: cover;
+          display: block;
         }
 
         /* Team */

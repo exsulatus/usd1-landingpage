@@ -29,8 +29,8 @@ function FaqItem({
         onClick={onToggle}
       >
         <span className="faqQText">{question}</span>
-        <span className="faqChevron" aria-hidden="true">
-          ▾
+        <span className="faqChevronCircle">
+          <svg className="faqChevron" width="14" height="14" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4.5 7l4.5 4 4.5-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </span>
       </button>
       {isOpen ? (
@@ -297,7 +297,7 @@ export function Footer() {
                       </p>
                     </div>
 
-                    <div className="faqList" aria-label="Frequently asked questions">
+                    <div className="faqList">
                       {faqItems.map((item) => (
                         <FaqItem
                           key={item.id}
@@ -372,61 +372,64 @@ export function Footer() {
 
                       <div className="howToCard howToCard--safety">
                         <h4 className="overlaySectionLabel">Safety checks</h4>
-                        <div className="safetyList">
-                          <div className="safetyItem">
-                            <span className="safetyDot" />
-                            <span className="safetyText">
-                              <strong>Verify the contract address</strong> in at least two trusted places
-                              (site + Solscan, or announcements + DexScreener).
-                            </span>
-                          </div>
-                          <div className="safetyItem">
-                            <span className="safetyDot" />
-                            <span className="safetyText">
-                              <strong>Avoid fake links</strong>: ignore random DMs/replies; use bookmarks and
-                              official channels.
-                            </span>
-                          </div>
-                          <div className="safetyItem">
-                            <span className="safetyDot" />
-                            <span className="safetyText">
-                              <strong>Slippage</strong>: if price is moving fast, slippage can spike
-                              —set a reasonable tolerance and understand what you’re approving.
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="slippageWrap">
-                          <button
-                            type="button"
-                            className={`slippageToggle ${slippageOpen ? "isOpen" : ""}`}
-                            onClick={() => setSlippageOpen((v) => !v)}
-                            aria-expanded={slippageOpen}
-                          >
-                            <span className="slippageToggleLabel">What is slippage?</span>
-                            <span className="slippageChevron" aria-hidden="true">▾</span>
-                          </button>
-                          {slippageOpen && (
-                            <div className="slippageBody">
-                              <p>
-                                <strong>Slippage</strong> is the difference between the price you expect
-                                for a trade and the price you actually get. It happens because prices
-                                move between the moment you submit a swap and the moment it executes on-chain.
-                              </p>
-                              <p>
-                                In thin or fast-moving markets—common with memecoins—slippage can be
-                                significant. Most swap interfaces let you set a{" "}
-                                <strong>slippage tolerance</strong> (e.g.&nbsp;0.5–3%). If the price moves
-                                more than your tolerance, the transaction reverts instead of executing
-                                at a worse price.
-                              </p>
-                              <p className="slippageMuted">
-                                Lower tolerance = more protection but more failed txs. Higher tolerance =
-                                more likely to fill but worse possible price. Start conservative and adjust.
-                              </p>
+                        {!slippageOpen ? (
+                          <div className="safetyList">
+                            <div className="safetyItem">
+                              <span className="safetyDot" />
+                              <span className="safetyText">
+                                <strong>Verify the contract address</strong> in at least two trusted places
+                                (site + Solscan, or announcements + DexScreener).
+                              </span>
                             </div>
-                          )}
-                        </div>
+                            <div className="safetyItem">
+                              <span className="safetyDot" />
+                              <span className="safetyText">
+                                <strong>Avoid fake links</strong>: ignore random DMs/replies; use bookmarks and
+                                official channels.
+                              </span>
+                            </div>
+                            <div className="safetyItem">
+                              <span className="safetyDot" />
+                              <span className="safetyText">
+                                <strong>Slippage</strong>: if price is moving fast, slippage can spike—set
+                                a reasonable tolerance.{" "}
+                                <button
+                                  type="button"
+                                  className="slippageLink"
+                                  onClick={() => setSlippageOpen(true)}
+                                >
+                                  What is slippage?
+                                </button>
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="slippageBody">
+                            <p>
+                              <strong>Slippage</strong> is the difference between the price you expect
+                              for a trade and the price you actually get. It happens because prices
+                              move between the moment you submit a swap and the moment it executes on-chain.
+                            </p>
+                            <p>
+                              In thin or fast-moving markets—common with memecoins—slippage can be
+                              significant. Most swap interfaces let you set a{" "}
+                              <strong>slippage tolerance</strong> (e.g. 0.5–3%). If the price moves
+                              more than your tolerance, the transaction reverts instead of executing
+                              at a worse price.
+                            </p>
+                            <p className="slippageMuted">
+                              Lower tolerance = more protection but more failed txs. Higher tolerance =
+                              more likely to fill but worse possible price. Start conservative and adjust.
+                            </p>
+                            <button
+                              type="button"
+                              className="slippageBack"
+                              onClick={() => setSlippageOpen(false)}
+                            >
+                              ← Back to safety checks
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -724,54 +727,87 @@ export function Footer() {
           color: var(--muted);
         }
 
-        /* FAQ */
+        /* FAQ — :global() needed because FaqItem is a child component */
         .faqList {
-          display: grid;
-          gap: 10px;
+          display: flex;
+          flex-direction: column;
         }
 
-        .faqItem {
-          border: 1px solid var(--border);
-          background: var(--surface-2);
-          border-radius: 18px;
-          overflow: hidden;
+        .faqList :global(.faqItem) {
+          border-bottom: 1px solid var(--border);
         }
 
-        .faqQuestion {
+        .faqList :global(.faqItem:last-child) {
+          border-bottom: none;
+        }
+
+        .faqList :global(.faqQuestion) {
           width: 100%;
           text-align: left;
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          gap: 14px;
-          padding: 14px 14px;
-          background: transparent;
+          gap: 20px;
+          padding: 20px 0;
+          background: none;
           border: 0;
           color: var(--text);
           cursor: pointer;
         }
 
-        .faqQText {
-          font-size: 16px;
-          font-weight: 750;
-          letter-spacing: -0.01em;
+        .faqList :global(.faqQText) {
+          flex: 1;
+          font-size: 17px;
+          font-weight: 600;
+          letter-spacing: -0.015em;
+          line-height: 1.35;
         }
 
-        .faqChevron {
-          color: var(--muted);
-          transition: transform 160ms ease;
+        .faqList :global(.faqChevronCircle) {
+          flex-shrink: 0;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 200ms ease;
         }
 
-        .faqItem.isOpen .faqChevron {
+        .faqList :global(.faqItem:nth-child(3n+1) .faqChevronCircle) {
+          background: rgba(33, 181, 143, 0.10);
+        }
+        .faqList :global(.faqItem:nth-child(3n+2) .faqChevronCircle) {
+          background: rgba(255, 122, 107, 0.10);
+        }
+        .faqList :global(.faqItem:nth-child(3n) .faqChevronCircle) {
+          background: rgba(123, 108, 255, 0.10);
+        }
+
+        :global(html.dark) .faqList :global(.faqItem:nth-child(3n+1) .faqChevronCircle) {
+          background: rgba(33, 181, 143, 0.15);
+        }
+        :global(html.dark) .faqList :global(.faqItem:nth-child(3n+2) .faqChevronCircle) {
+          background: rgba(255, 122, 107, 0.15);
+        }
+        :global(html.dark) .faqList :global(.faqItem:nth-child(3n) .faqChevronCircle) {
+          background: rgba(123, 108, 255, 0.15);
+        }
+
+        .faqList :global(.faqChevron) {
+          color: var(--muted2);
+          transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faqList :global(.faqItem.isOpen .faqChevron) {
           transform: rotate(180deg);
         }
 
-        .faqAnswer {
-          padding: 0 14px 14px 14px;
+        .faqList :global(.faqAnswer) {
+          padding: 0 0 20px 0;
           color: var(--muted);
-          font-size: 14px;
-          line-height: 1.5;
-          max-width: 90ch;
+          font-size: 15px;
+          line-height: 1.7;
+          max-width: 60ch;
         }
 
         /* How-to */
@@ -912,75 +948,37 @@ export function Footer() {
           color: var(--muted);
         }
 
-        /* Slippage expandable */
-        .slippageWrap {
-          margin-top: 16px;
-          padding-top: 16px;
-          border-top: 1px solid var(--border);
-        }
-
-        .slippageToggle {
+        /* Slippage inline link + flip body */
+        .slippageLink {
           appearance: none;
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 10px;
-          padding: 10px 14px;
-          background: rgba(33, 181, 143, 0.06);
-          border: 1px solid rgba(33, 181, 143, 0.14);
-          border-radius: 12px;
+          background: none;
+          border: 0;
+          padding: 0;
+          font-size: inherit;
+          font-weight: 600;
+          color: #21b58f;
           cursor: pointer;
-          transition: background 140ms ease, border-color 140ms ease;
+          text-decoration: underline;
+          text-decoration-color: rgba(33, 181, 143, 0.3);
+          text-underline-offset: 2px;
+          transition: text-decoration-color 140ms ease;
         }
 
-        .slippageToggle:hover {
-          background: rgba(33, 181, 143, 0.10);
-          border-color: rgba(33, 181, 143, 0.22);
+        .slippageLink:hover {
+          text-decoration-color: #21b58f;
         }
 
-        .slippageToggle:focus-visible {
-          outline: none;
-          box-shadow: var(--focus);
-        }
-
-        :global(html.dark) .slippageToggle {
-          background: rgba(33, 181, 143, 0.08);
-          border-color: rgba(33, 181, 143, 0.18);
-        }
-
-        :global(html.dark) .slippageToggle:hover {
-          background: rgba(33, 181, 143, 0.12);
-          border-color: rgba(33, 181, 143, 0.26);
-        }
-
-        .slippageToggleLabel {
-          font-size: 14px;
-          font-weight: 700;
-          color: #21b58f;
-          letter-spacing: -0.01em;
-        }
-
-        :global(html.dark) .slippageToggleLabel {
+        :global(html.dark) .slippageLink {
           color: #3bc9a4;
+          text-decoration-color: rgba(59, 201, 164, 0.3);
         }
 
-        .slippageChevron {
-          color: #21b58f;
-          font-size: 14px;
-          transition: transform 160ms ease;
-        }
-
-        :global(html.dark) .slippageChevron {
-          color: #3bc9a4;
-        }
-
-        .slippageToggle.isOpen .slippageChevron {
-          transform: rotate(180deg);
+        :global(html.dark) .slippageLink:hover {
+          text-decoration-color: #3bc9a4;
         }
 
         .slippageBody {
-          padding: 16px 2px 4px 2px;
+          padding: 0;
         }
 
         .slippageBody p {
@@ -998,6 +996,27 @@ export function Footer() {
           font-size: 13px !important;
           color: var(--muted2) !important;
           font-style: italic;
+        }
+
+        .slippageBack {
+          appearance: none;
+          background: none;
+          border: 0;
+          padding: 0;
+          margin-top: 14px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #21b58f;
+          cursor: pointer;
+          transition: opacity 140ms ease;
+        }
+
+        .slippageBack:hover {
+          opacity: 0.7;
+        }
+
+        :global(html.dark) .slippageBack {
+          color: #3bc9a4;
         }
 
         .overlayLink {
@@ -1043,6 +1062,7 @@ export function Footer() {
           .howToFlow {
             grid-template-columns: 1fr;
           }
+
         }
 
         @media (max-width: 768px) {
@@ -1077,6 +1097,14 @@ export function Footer() {
 
           .footerOverlayTitle {
             font-size: 30px;
+          }
+
+          .faqList :global(.faqQText) {
+            font-size: 16px;
+          }
+
+          .faqList :global(.faqQuestion) {
+            padding: 16px 0;
           }
         }
       `}</style>

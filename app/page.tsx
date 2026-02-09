@@ -480,7 +480,7 @@ export default function HomePage() {
       <style jsx>{`
         .hero {
           /* Match the page’s section rhythm so the hero doesn’t feel cramped */
-          padding: 82px 0 82px 0;
+          padding: 52px 0 44px 0;
         }
         .heroInner {
           display: grid;
@@ -492,7 +492,7 @@ export default function HomePage() {
           padding: 14px;
           position: relative;
           overflow: hidden;
-          min-height: 540px;
+          min-height: 440px;
           display: grid;
           align-items: stretch;
         }
@@ -555,8 +555,8 @@ export default function HomePage() {
         }
         .heroAside {
           display: grid;
-          gap: 14px;
-          padding: 18px 2px;
+          gap: 10px;
+          padding: 8px 2px;
           align-content: center;
         }
         .headline {
@@ -584,7 +584,7 @@ export default function HomePage() {
         }
         .ctaRow {
           display: flex;
-          margin-top: 18px;
+          margin-top: 10px;
         }
         /* Hero primary CTA: larger, bolder */
         .ctaRow :global(.btnHero) {
@@ -806,6 +806,10 @@ export default function HomePage() {
           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
           gap: 12px;
         }
+        .aboutSection {
+          padding-top: 64px;
+          padding-bottom: 72px;
+        }
         .aboutSection .aboutTopGrid {
           display: grid;
           grid-template-columns: minmax(0, 1fr) minmax(240px, 0.8fr);
@@ -871,7 +875,7 @@ export default function HomePage() {
           max-width: 72ch;
         }
         .aboutSection .aboutPillars {
-          margin-top: 32px; /* Add space below the top grid */
+          margin-top: 24px; /* Add space below the top grid */
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 12px;
@@ -2030,7 +2034,7 @@ export default function HomePage() {
             min-height: 420px;
           }
           .hero {
-            padding: 66px 0 66px 0;
+            padding: 44px 0 38px 0;
           }
           .howLayout {
             grid-template-columns: 1fr;
