@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import React from "react";
+import { useI18n } from "@/lib/i18n/context";
 
 type FooterOverlay = "none" | "faq" | "howto";
 
@@ -14,7 +14,7 @@ function FaqItem({
 }: {
   id: string;
   question: string;
-  answer: string;
+  answer: React.ReactNode;
   isOpen: boolean;
   onToggle: () => void;
 }) {
@@ -43,6 +43,7 @@ function FaqItem({
 }
 
 export function Footer() {
+  const { t } = useI18n();
   const [overlay, setOverlay] = React.useState<FooterOverlay>("none");
   const [overlayMounted, setOverlayMounted] = React.useState(false);
   const [openFaqId, setOpenFaqId] = React.useState<string | null>(null);
@@ -63,8 +64,8 @@ export function Footer() {
       return;
     }
     if (!overlayMounted) return;
-    const t = window.setTimeout(() => setOverlayMounted(false), 220);
-    return () => window.clearTimeout(t);
+    const tm = window.setTimeout(() => setOverlayMounted(false), 220);
+    return () => window.clearTimeout(tm);
   }, [overlay, overlayMounted]);
 
   React.useEffect(() => {
@@ -86,46 +87,29 @@ export function Footer() {
     setSlippageOpen(false);
   }, [overlay]);
 
+  /* Listen for external triggers (e.g. header nav) */
+  React.useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<"howto" | "faq">).detail;
+      if (detail === "howto" || detail === "faq") {
+        setOverlay(detail);
+      }
+    };
+    window.addEventListener("open-footer-overlay", handler);
+    return () => window.removeEventListener("open-footer-overlay", handler);
+  }, []);
+
   const faqItems = React.useMemo(
-    () => [
-      {
-        id: "what-is-usd1",
-        q: "What is $USD1?",
-        a: "USD1 is a memecoin on Solana. It’s community-driven, high-volatility, and meant to be explored carefully—start small and move at your own pace.",
-      },
-      {
-        id: "financial-advice",
-        q: "Is this financial advice?",
-        a: "No. This site is for education and links—not investment recommendations. Memecoins can go to zero; only risk what you can comfortably lose.",
-      },
-      {
-        id: "contract-verification",
-        q: "Where can I find the contract and verification?",
-        a: "Use the official links on this site and our announcements. Then cross-check the contract on Solscan and confirm the same address appears on charts and swap UIs.",
-      },
-      {
-        id: "streamflow-lock",
-        q: "What’s the Streamflow lock?",
-        a: "Streamflow can be used to lock tokens on a public schedule. It’s one transparency signal—still verify the exact lock details and wallet addresses yourself.",
-      },
-      {
-        id: "charts-liquidity",
-        q: "Where do I see charts/liquidity?",
-        a: "Charts/liquidity views typically live on DexScreener, with swaps on Jupiter. For on-chain details (holders, txs), use Solscan.",
-      },
-      {
-        id: "announcements-links",
-        q: "Where do announcements/live links live?",
-        a: "Check the site’s announcements and our official social channels. Treat random DMs and sponsored replies as untrusted until verified across multiple sources.",
-      },
-      {
-        id: "why-price-changes-fast",
-        q: "Why does the price move so fast?",
-        a: "Memecoins are thin, sentiment-driven markets. Small trades can move price, spreads can widen, and slippage can spike—especially during hype cycles.",
-      },
-    ],
-    [],
+    () =>
+      [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({
+        id: `faq-${n}`,
+        q: t(`footer.faq_q${n}` as any),
+        a: t(`footer.faq_a${n}` as any),
+      })),
+    [t],
   );
+
+  const overlayHint = t("footer.overlay_hint" as any);
 
   return (
     <footer className="siteFooter" aria-label="Site footer">
@@ -137,7 +121,7 @@ export function Footer() {
               <div className="footerLeft">
                 <div className="footerNav">
                   <div className="footerNavGroup">
-                    <span className="groupLabel">Resources</span>
+                    <span className="groupLabel">{t("footer.resources")}</span>
                     <div className="footerPills" aria-label="Footer quick panels">
                       <button
                         type="button"
@@ -145,7 +129,7 @@ export function Footer() {
                         onClick={() => openOverlay("howto")}
                         aria-expanded={overlay === "howto"}
                       >
-                        How to buy
+                        {t("footer.how_to_buy")}
                       </button>
                       <button
                         type="button"
@@ -153,13 +137,13 @@ export function Footer() {
                         onClick={() => openOverlay("faq")}
                         aria-expanded={overlay === "faq"}
                       >
-                        FAQ
+                        {t("footer.faq")}
                       </button>
                     </div>
                   </div>
 
                   <div className="footerNavGroup">
-                    <span className="groupLabel">Ecosystem</span>
+                    <span className="groupLabel">{t("footer.ecosystem")}</span>
                     <ul className="linkList">
                       <li>
                         <a
@@ -198,18 +182,18 @@ export function Footer() {
                           target="_blank"
                           rel="noreferrer"
                         >
-                          Token Locks
+                          {t("footer.token_locks")}
                         </a>
                       </li>
                     </ul>
                   </div>
 
                   <div className="footerNavGroup">
-                    <span className="groupLabel">Social</span>
+                    <span className="groupLabel">{t("footer.social")}</span>
                     <ul className="linkList">
                       <li>
                         <a
-                          href="https://x.com/unicornsheepdog"
+                          href="https://x.com/UnicornSheepDog"
                           className="footerLink"
                           target="_blank"
                           rel="noreferrer"
@@ -219,7 +203,7 @@ export function Footer() {
                       </li>
                       <li>
                         <a
-                          href="https://t.me/unicornsheepdog"
+                          href="https://t.me/UnicornSheepDog1"
                           className="footerLink"
                           target="_blank"
                           rel="noreferrer"
@@ -228,13 +212,18 @@ export function Footer() {
                         </a>
                       </li>
                       <li>
-                        <Link href="/gallery" className="footerLink">
-                          Meme / Art Gallery
-                        </Link>
+                        <a
+                          href="https://t.me/USD1_Memes"
+                          className="footerLink"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {t("footer.meme_gallery")}
+                        </a>
                       </li>
                       <li>
-                        <a href="mailto:hello@theunicornsheep.dog" className="footerLink">
-                          hello@theunicornsheep.dog
+                        <a href="mailto:support@theunicornsheep.dog" className="footerLink">
+                          support@theunicornsheep.dog
                         </a>
                       </li>
                     </ul>
@@ -245,14 +234,14 @@ export function Footer() {
               {/* Right: Editorial Typography */}
               <div className="footerRight">
                 <div className="statementWrap">
-                  <p className="statementEyebrow">Not all questions have clear answers.</p>
-                  <h2 className="statementHeadline">Stay curious.</h2>
+                  <p className="statementEyebrow">{t("footer.statement_eyebrow")}</p>
+                  <h2 className="statementHeadline">{t("footer.statement_headline")}</h2>
                 </div>
               </div>
             </div>
 
             <p className="footerDisclaimer">
-              USD1 is a memecoin. Memecoins are risky. Only invest what you are willing to lose.
+              {t("footer.disclaimer")}
             </p>
           </div>
         </div>
@@ -270,15 +259,6 @@ export function Footer() {
                 if (e.target === e.currentTarget) closeOverlay();
               }}
             >
-              <button
-                type="button"
-                className="footerOverlayClose"
-                onClick={closeOverlay}
-                aria-label="Close"
-                ref={closeBtnRef}
-              >
-                ×
-              </button>
               <div
                 className="footerOverlayPanel"
                 onClick={(e) => e.stopPropagation()}
@@ -286,14 +266,23 @@ export function Footer() {
                 aria-modal="true"
                 aria-labelledby="footerOverlayTitle"
               >
+                <button
+                  type="button"
+                  className="footerOverlayClose"
+                  onClick={closeOverlay}
+                  aria-label="Close"
+                  ref={closeBtnRef}
+                >
+                  ×
+                </button>
                 {overlay === "faq" ? (
                   <div className="footerOverlayContent">
                     <div className="footerOverlayHead">
                       <h3 className="footerOverlayTitle" id="footerOverlayTitle">
-                        FAQ
+                        {t("footer.faq_title" as any)}
                       </h3>
                       <p className="footerOverlaySub">
-                        Calm answers, verified links, and a reminder to go slow.
+                        {t("footer.faq_sub" as any)}
                       </p>
                     </div>
 
@@ -311,7 +300,11 @@ export function Footer() {
                     </div>
 
                     <div className="footerOverlayHint">
-                      Tip: click outside, press the <span className="kbdLike">×</span>, or press <span className="kbdLike">Esc</span> to close.
+                      {overlayHint.split("{x}")[0]}
+                      <span className="kbdLike">×</span>
+                      {overlayHint.split("{x}")[1]?.split("{esc}")[0]}
+                      <span className="kbdLike">Esc</span>
+                      {overlayHint.split("{x}")[1]?.split("{esc}")[1]}
                     </div>
                   </div>
                 ) : null}
@@ -320,47 +313,47 @@ export function Footer() {
                   <div className="footerOverlayContent">
                     <div className="footerOverlayHead">
                       <h3 className="footerOverlayTitle" id="footerOverlayTitle">
-                        How to buy
+                        {t("footer.howto_title" as any)}
                       </h3>
                       <p className="footerOverlaySub">
-                        A simple Solana flow. No hype—just steps and safety checks.
+                        {t("footer.howto_sub" as any)}
                       </p>
                     </div>
 
                     <div className="howToFlow">
                       <div className="howToCard howToCard--steps">
-                        <h4 className="overlaySectionLabel">Steps</h4>
+                        <h4 className="overlaySectionLabel">{t("footer.howto_steps" as any)}</h4>
                         <div className="stepTimeline">
                           <div className="stepRow">
                             <span className="stepNum">1</span>
-                            <span className="stepText">Get a Solana wallet (Phantom, Solflare, etc.).</span>
+                            <span className="stepText">{t("footer.howto_step1" as any)}</span>
                           </div>
                           <div className="stepRow">
                             <span className="stepNum">2</span>
-                            <span className="stepText">Fund it with SOL — you&apos;ll need enough for fees and the swap itself.</span>
+                            <span className="stepText">{t("footer.howto_step2" as any)}</span>
                           </div>
                           <div className="stepRow">
                             <span className="stepNum">3</span>
                             <span className="stepText">
-                              Use{" "}
+                              {t("footer.howto_step3_pre" as any)}{" "}
                               <a href="https://jup.ag" target="_blank" rel="noreferrer" className="overlayLink">
                                 Jupiter
                               </a>{" "}
-                              to swap SOL → USD1.
+                              {t("footer.howto_step3_post" as any)}
                             </span>
                           </div>
                           <div className="stepRow">
                             <span className="stepNum">4</span>
-                            <span className="stepText">Verify the contract address from official sources.</span>
+                            <span className="stepText">{t("footer.howto_step4" as any)}</span>
                           </div>
                           <div className="stepRow">
                             <span className="stepNum">5</span>
                             <span className="stepText">
-                              Cross-check on{" "}
+                              {t("footer.howto_step5_pre" as any)}{" "}
                               <a href="https://solscan.io/" target="_blank" rel="noreferrer" className="overlayLink">
                                 Solscan
                               </a>{" "}
-                              and{" "}
+                              {t("footer.howto_step5_mid" as any)}{" "}
                               <a href="https://dexscreener.com/solana" target="_blank" rel="noreferrer" className="overlayLink">
                                 DexScreener
                               </a>
@@ -371,34 +364,31 @@ export function Footer() {
                       </div>
 
                       <div className="howToCard howToCard--safety">
-                        <h4 className="overlaySectionLabel">Safety checks</h4>
+                        <h4 className="overlaySectionLabel">{t("footer.howto_safety" as any)}</h4>
                         {!slippageOpen ? (
                           <div className="safetyList">
                             <div className="safetyItem">
                               <span className="safetyDot" />
                               <span className="safetyText">
-                                <strong>Verify the contract address</strong> in at least two trusted places
-                                (site + Solscan, or announcements + DexScreener).
+                                {t("footer.howto_safety1" as any)}
                               </span>
                             </div>
                             <div className="safetyItem">
                               <span className="safetyDot" />
                               <span className="safetyText">
-                                <strong>Avoid fake links</strong>: ignore random DMs/replies; use bookmarks and
-                                official channels.
+                                {t("footer.howto_safety2" as any)}
                               </span>
                             </div>
                             <div className="safetyItem">
                               <span className="safetyDot" />
                               <span className="safetyText">
-                                <strong>Slippage</strong>: if price is moving fast, slippage can spike—set
-                                a reasonable tolerance.{" "}
+                                {t("footer.howto_safety3" as any)}{" "}
                                 <button
                                   type="button"
                                   className="slippageLink"
                                   onClick={() => setSlippageOpen(true)}
                                 >
-                                  What is slippage?
+                                  {t("footer.howto_slippage_q" as any)}
                                 </button>
                               </span>
                             </div>
@@ -406,35 +396,44 @@ export function Footer() {
                         ) : (
                           <div className="slippageBody">
                             <p>
-                              <strong>Slippage</strong> is the difference between the price you expect
-                              for a trade and the price you actually get. It happens because prices
-                              move between the moment you submit a swap and the moment it executes on-chain.
+                              {t("footer.howto_slippage_p1" as any)}
                             </p>
                             <p>
-                              In thin or fast-moving markets—common with memecoins—slippage can be
-                              significant. Most swap interfaces let you set a{" "}
-                              <strong>slippage tolerance</strong> (e.g. 0.5–3%). If the price moves
-                              more than your tolerance, the transaction reverts instead of executing
-                              at a worse price.
+                              {t("footer.howto_slippage_p2" as any)}
                             </p>
                             <p className="slippageMuted">
-                              Lower tolerance = more protection but more failed txs. Higher tolerance =
-                              more likely to fill but worse possible price. Start conservative and adjust.
+                              {t("footer.howto_slippage_tip" as any)}
                             </p>
                             <button
                               type="button"
                               className="slippageBack"
                               onClick={() => setSlippageOpen(false)}
                             >
-                              ← Back to safety checks
+                              {t("footer.howto_slippage_back" as any)}
                             </button>
                           </div>
                         )}
                       </div>
                     </div>
 
+                    <div className="howToCTARow">
+                      <a
+                        href="https://jup.ag"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="howToCTABtn"
+                      >
+                        {t("footer.howto_cta" as any)}
+                        <span className="howToCTAArrow" aria-hidden="true">&#8599;</span>
+                      </a>
+                    </div>
+
                     <div className="footerOverlayHint">
-                      Tip: click outside, press the <span className="kbdLike">×</span>, or press <span className="kbdLike">Esc</span> to close.
+                      {overlayHint.split("{x}")[0]}
+                      <span className="kbdLike">×</span>
+                      {overlayHint.split("{x}")[1]?.split("{esc}")[0]}
+                      <span className="kbdLike">Esc</span>
+                      {overlayHint.split("{x}")[1]?.split("{esc}")[1]}
                     </div>
                   </div>
                 ) : null}
@@ -651,27 +650,28 @@ export function Footer() {
 
         .footerOverlayClose {
           position: absolute;
-          top: 24px;
+          top: 20px;
           right: 20px;
-          width: 44px;
-          height: 44px;
-          border-radius: 14px;
-          border: 1px solid var(--borderStrong);
-          background: var(--surface);
-          color: var(--text);
+          width: 40px;
+          height: 40px;
+          border-radius: 12px;
+          border: 1px solid rgba(255, 122, 107, 0.25);
+          background: var(--surface-2);
+          color: var(--accentCoral);
           cursor: pointer;
-          font-size: 28px;
+          font-size: 24px;
           line-height: 1;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          z-index: 1010;
-          transition: background 140ms ease, border-color 140ms ease, transform 140ms ease;
+          z-index: 2;
+          transition: background 140ms ease, border-color 140ms ease, transform 140ms ease, color 140ms ease;
         }
 
         .footerOverlayClose:hover {
-          background: var(--surface-2);
-          border-color: var(--borderStrong);
+          background: rgba(255, 122, 107, 0.08);
+          border-color: rgba(255, 122, 107, 0.40);
+          color: var(--accentCoral);
           transform: translateY(-2px);
         }
 
@@ -807,7 +807,17 @@ export function Footer() {
           color: var(--muted);
           font-size: 15px;
           line-height: 1.7;
-          max-width: 60ch;
+          max-width: 90ch;
+        }
+        .faqList :global(.faqLink) {
+          color: var(--accentMint);
+          text-decoration: underline;
+          text-underline-offset: 2px;
+          text-decoration-color: rgba(33, 181, 143, 0.35);
+          transition: text-decoration-color 150ms ease;
+        }
+        .faqList :global(.faqLink:hover) {
+          text-decoration-color: var(--accentMint);
         }
 
         /* How-to */
@@ -843,6 +853,35 @@ export function Footer() {
 
         .howToCard--safety::before {
           background: #ff7a6b;
+        }
+
+        /* How-to CTA row */
+        .howToCTARow {
+          display: flex;
+          justify-content: center;
+          padding: 24px 0 4px 0;
+        }
+        .howToCTABtn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 28px;
+          font-size: 15px;
+          font-weight: 700;
+          color: #fff;
+          background: var(--accentMint);
+          border: 1.5px solid var(--accentMint);
+          border-radius: var(--radius-sm);
+          text-decoration: none;
+          transition: background 160ms ease, box-shadow 160ms ease;
+          cursor: pointer;
+        }
+        .howToCTABtn:hover {
+          background: #1ca37f;
+          box-shadow: 0 2px 12px rgba(33, 181, 143, 0.25);
+        }
+        .howToCTAArrow {
+          font-size: 15px;
         }
 
         .overlaySectionLabel {

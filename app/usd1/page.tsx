@@ -2,6 +2,8 @@
 
 import React from "react";
 import { IconCopy } from "@/components/icons";
+import TOKENOMICS from "@/data/tokenomics.json";
+import { useI18n } from "@/lib/i18n/context";
 
 /* ─── Constants ─── */
 
@@ -29,8 +31,10 @@ const TEAM = [
   {
     initials: "PL",
     name: "Exs",
-    title: "Strategy & Vision",
-    desc: "Drives direction, coordinates development, and guides community growth.",
+    handle: "@exsulatus",
+    handleUrl: "https://x.com/exsulatus",
+    desc: "Focused on development, transparency infrastructure, and ongoing creative direction.",
+    descKey: "usd1.team_exs",
     accent: "var(--accentMint)",
     tint: "var(--tintMint)",
     pfp: "/images/pfp.exs.jpeg",
@@ -38,8 +42,10 @@ const TEAM = [
   {
     initials: "LD",
     name: "Genie",
-    title: "Art & Identity",
-    desc: "Creates memes, visual assets, and the overall brand aesthetic.",
+    handle: "@GreenGenieGuild",
+    handleUrl: "https://x.com/GreenGenieGuild",
+    desc: "Supports creative output and community perspective with prior experience in crypto project environments.",
+    descKey: "usd1.team_genie",
     accent: "var(--accentLavender)",
     tint: "var(--tintLavender)",
     pfp: "/images/pfp.genie.jpeg",
@@ -47,8 +53,10 @@ const TEAM = [
   {
     initials: "CM",
     name: "Duck",
-    title: "Community & Socials",
-    desc: "Nurtures the community, moderates channels, and surfaces feedback.",
+    handle: "@duck_king74",
+    handleUrl: "https://x.com/duck_king74",
+    desc: "Helps with communications, social infrastructure, and outreach related to listings and verification.",
+    descKey: "usd1.team_duck",
     accent: "var(--accentCoral)",
     tint: "var(--tintCoral)",
     pfp: "/images/pfp.duck.jpeg",
@@ -56,8 +64,10 @@ const TEAM = [
   {
     initials: "CD",
     name: "Bubba",
-    title: "On-chain Infrastructure",
-    desc: "Builds, maintains, and verifies the smart contract and tooling layer.",
+    handle: "@0x_bubba",
+    handleUrl: "https://x.com/0x_bubba",
+    desc: "Contributes on-chain research, liquidity discussions, and broader ecosystem connections.",
+    descKey: "usd1.team_bubba",
     accent: "var(--accentMint)",
     tint: "var(--tintMint)",
     pfp: "/images/pfp.bubba.jpeg",
@@ -81,6 +91,7 @@ const MEME_ANGLE = 360 / MEME_COUNT; // 40deg per item
 /* ─── Page ─── */
 
 export default function Usd1Page() {
+  const { t } = useI18n();
   const [copied, setCopied] = React.useState(false);
 
   /* ─── Revolving meme carousel ─── */
@@ -131,26 +142,67 @@ export default function Usd1Page() {
     }
   }, []);
 
-  /* Controlled-supply percentage */
-  const controlledPct = ((400_206_164 / 999_834_836.562034) * 100).toFixed(1);
+  /* Controlled-supply percentage (auto-calculated from tokenomics.json) */
+  const controlledPct = ((TOKENOMICS.controlledSupplyRaw / TOKENOMICS.totalSupplyRaw) * 100).toFixed(1);
 
   return (
     <>
+      {/* ─── Splash (pixelated burst — edges → center) ─── */}
+      <div id="u1-splash" aria-hidden="true" style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 99999,
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+        {Array.from({ length: 70 }, (_, i) => {
+          const c = i % 10;
+          const r = Math.floor(i / 10);
+          const dx = (c - 4.5) / 4.5;
+          const dy = (r - 3) / 3;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const delay = Math.round(1000 + (1 - dist / Math.SQRT2) * 1000);
+          return (
+            <div
+              key={i}
+              className="u1SplashCell"
+              style={{
+                left: `${c * 10}vw`,
+                top: `${r * 14.2857}vh`,
+                animationDelay: `${delay}ms`,
+              } as React.CSSProperties}
+            />
+          );
+        })}
+        <span className="u1SplashText">{t("usd1.splash")}</span>
+      </div>
+
       {/* ─── Hero ─── */}
       <section className="u1Hero">
         <div className="u1HeroBg" aria-hidden="true" />
         <div className="container u1HeroContainer">
           <div className="u1HeroContent">
-            <p className="u1HeroEyebrow">Solana Memecoin</p>
+            <p className="u1HeroEyebrow">{t("usd1.hero_eyebrow")}</p>
             <h1 className="u1HeroTitle">
               UnicornSheepDog1{" "}
               <span className="u1HeroTicker">(USD1)</span>
             </h1>
             <p className="u1HeroTagline">
-              Built on transparency and public verification.
+              {t("usd1.hero_tagline")}
             </p>
 
             <div className="u1HeroActions">
+              <a
+                href={LINKS.jupiter}
+                target="_blank"
+                rel="noreferrer"
+                className="btn u1BuyBtn"
+              >
+                {t("usd1.buy_on_jupiter" as any)}
+                <span className="u1BuyArrow" aria-hidden="true">&#8599;</span>
+              </a>
               <button
                 type="button"
                 className={`btn u1CopyBtn ${copied ? "isCopied" : ""}`}
@@ -158,14 +210,14 @@ export default function Usd1Page() {
                 aria-label="Copy mint address to clipboard"
               >
                 <IconCopy size={16} />
-                {copied ? "Copied!" : "Copy Mint Address"}
+                {copied ? t("usd1.copied") : t("usd1.copy_mint")}
               </button>
             </div>
 
             <div className="u1MintRow">
               <code className="u1Mint">{MINT}</code>
               <span className="u1MintNote">
-                Ticker collision exists — verify mint address.
+                {t("usd1.mint_note")}
               </span>
             </div>
           </div>
@@ -185,15 +237,15 @@ export default function Usd1Page() {
       <div className="u1QuickLinks">
         <div className="container u1QLGrid">
           <div className="u1QLCol">
-            <span className="u1QLLabel u1QLMint">Trade</span>
+            <span className="u1QLLabel u1QLMint">{t("usd1.quick_trade")}</span>
             <div className="u1QLLinks">
-              <a href={LINKS.jupiter} target="_blank" rel="noreferrer" className="u1QLLink u1QLLinkMint">Jupiter</a>
+              <a href={LINKS.jupiter} target="_blank" rel="noreferrer" className="u1QLLink u1QLLinkMint u1QLPrimary">Jupiter &#8599;</a>
               <a href={LINKS.dexscreener} target="_blank" rel="noreferrer" className="u1QLLink u1QLLinkMint">DexScreener</a>
             </div>
           </div>
           <div className="u1QLDivider" />
           <div className="u1QLCol">
-            <span className="u1QLLabel u1QLLav">Verify</span>
+            <span className="u1QLLabel u1QLLav">{t("usd1.quick_verify")}</span>
             <div className="u1QLLinks">
               <a href={LINKS.solscan} target="_blank" rel="noreferrer" className="u1QLLink u1QLLinkLav">Solscan</a>
               <a href={LINKS.streamflow} target="_blank" rel="noreferrer" className="u1QLLink u1QLLinkLav">Streamflow</a>
@@ -201,7 +253,7 @@ export default function Usd1Page() {
           </div>
           <div className="u1QLDivider" />
           <div className="u1QLCol">
-            <span className="u1QLLabel u1QLCoral">Community</span>
+            <span className="u1QLLabel u1QLCoral">{t("usd1.quick_community")}</span>
             <div className="u1QLLinks">
               <a href={LINKS.x} target="_blank" rel="noreferrer" className="u1QLLink u1QLLinkCoral">X</a>
               <a href={LINKS.telegram} target="_blank" rel="noreferrer" className="u1QLLink u1QLLinkCoral">Telegram</a>
@@ -222,39 +274,37 @@ export default function Usd1Page() {
           <div className="u1Cube u1Cube6" />
         </div>
         <div className="container u1AboutContainer">
-          <p className="u1AboutEyebrow">About USD1</p>
+          <p className="u1AboutEyebrow">{t("usd1.about_eyebrow")}</p>
           <h2 className="u1AboutHeadline">
-            Transparency you can<br />
-            verify on-chain.
+            {t("usd1.about_headline_1")}<br />
+            {t("usd1.about_headline_2")}
           </h2>
           <p className="u1AboutSub">
-            USD1 is a community-driven memecoin on Solana where every token
-            movement is traceable, every lock is time-bound, and every reserve
-            is disclosed. No guessing, no hidden wallets.
+            {t("usd1.about_desc")}
           </p>
 
           <div className="u1AboutFeatures">
             <div className="u1AboutFeature">
               <div className="u1FeatureDot u1FeatureDotMint" />
               <div className="u1FeatureText">
-                <span className="u1FeatureLabel">Public Locks</span>
-                <span className="u1FeatureDesc">Time-bound &amp; verifiable on-chain</span>
+                <span className="u1FeatureLabel">{t("usd1.feat_locks")}</span>
+                <span className="u1FeatureDesc">{t("usd1.feat_locks_desc")}</span>
               </div>
             </div>
             <div className="u1AboutFeatureDivider" />
             <div className="u1AboutFeature">
               <div className="u1FeatureDot u1FeatureDotLav" />
               <div className="u1FeatureText">
-                <span className="u1FeatureLabel">Open Reserves</span>
-                <span className="u1FeatureDesc">Fully disclosed holdings</span>
+                <span className="u1FeatureLabel">{t("usd1.feat_reserves")}</span>
+                <span className="u1FeatureDesc">{t("usd1.feat_reserves_desc")}</span>
               </div>
             </div>
             <div className="u1AboutFeatureDivider" />
             <div className="u1AboutFeature">
               <div className="u1FeatureDot u1FeatureDotCoral" />
               <div className="u1FeatureText">
-                <span className="u1FeatureLabel">Fully Traceable</span>
-                <span className="u1FeatureDesc">Every movement on Solscan</span>
+                <span className="u1FeatureLabel">{t("usd1.feat_traceable")}</span>
+                <span className="u1FeatureDesc">{t("usd1.feat_traceable_desc")}</span>
               </div>
             </div>
           </div>
@@ -264,77 +314,77 @@ export default function Usd1Page() {
       {/* ─── Tokenomics ─── */}
       <section id="usd1-tokenomics" className="section u1Section">
         <div className="container">
-          <p className="u1SectionEyebrow">Tokenomics</p>
-          <h2 className="u1SectionHeadline">Supply at a glance</h2>
+          <p className="u1SectionEyebrow">{t("usd1.tok_eyebrow")}</p>
+          <h2 className="u1SectionHeadline">{t("usd1.tok_headline")}</h2>
 
           {/* Token identity - compact inline strip */}
           <div className="u1TokenMeta">
             <span className="u1TokenMetaItem">
-              <span className="u1TokenMetaKey">Name</span> UnicornSheepDog1
+              <span className="u1TokenMetaKey">{t("usd1.label_name")}</span> UnicornSheepDog1
             </span>
             <span className="u1TokenMetaSep" aria-hidden="true">/</span>
             <span className="u1TokenMetaItem">
-              <span className="u1TokenMetaKey">Ticker</span> USD1
+              <span className="u1TokenMetaKey">{t("usd1.label_ticker")}</span> USD1
             </span>
             <span className="u1TokenMetaSep" aria-hidden="true">/</span>
             <span className="u1TokenMetaItem">
-              <span className="u1TokenMetaKey">Chain</span> Solana
+              <span className="u1TokenMetaKey">{t("usd1.label_chain")}</span> Solana
             </span>
           </div>
 
           {/* Mint address */}
           <div className="u1TokenMintRow">
-            <span className="u1TokenMetaKey">Mint</span>
+            <span className="u1TokenMetaKey">{t("usd1.label_mint")}</span>
             <code className="u1TokenMintAddr">{MINT}</code>
           </div>
 
           {/* Hero supply numbers */}
           <div className="u1SupplyRow">
             <div className="u1SupplyItem">
-              <span className="u1SupplyNum">999,834,836</span>
-              <span className="u1SupplyLabel">Total Supply</span>
+              <span className="u1SupplyNum">{TOKENOMICS.totalSupply}</span>
+              <span className="u1SupplyLabel">{t("usd1.label_total_supply")}</span>
             </div>
             <div className="u1SupplyDivider" />
             <div className="u1SupplyItem">
-              <span className="u1SupplyNum">599,628,672</span>
-              <span className="u1SupplyLabel">Circulating</span>
+              <span className="u1SupplyNum">{TOKENOMICS.circulatingSupply}</span>
+              <span className="u1SupplyLabel">{t("usd1.label_circulating")}</span>
             </div>
             <div className="u1SupplyDivider" />
             <div className="u1SupplyItem u1SupplyItemHighlight">
               <span className="u1SupplyNum">
-                400,206,164
+                {TOKENOMICS.controlledSupply}
                 <span className="u1SupplyPct"> ({controlledPct}%)</span>
               </span>
-              <span className="u1SupplyLabel">Controlled</span>
+              <span className="u1SupplyLabel">{t("usd1.label_controlled")}</span>
             </div>
           </div>
 
           {/* Breakdown */}
           <div className="u1BreakdownSection">
-            <h3 className="u1SmallHeading">Breakdown</h3>
+            <h3 className="u1SmallHeading">{t("usd1.label_breakdown")}</h3>
             <div className="u1BreakdownList">
               <div className="u1BreakdownItem">
                 <span className="u1BreakdownDot" style={{ background: "var(--accentMint)" }} />
-                <span className="u1BreakdownKey">Community Locks</span>
+                <span className="u1BreakdownKey">{t("usd1.label_community_locks")}</span>
                 <span className="u1BreakdownLine" />
                 <span className="u1BreakdownVal">
-                  150,231,128 <span className="u1BreakdownPct" style={{ color: "var(--accentMint)" }}>(15.0%)</span>
+                  {TOKENOMICS.breakdown.communityLocks} <span className="u1BreakdownPct" style={{ color: "var(--accentMint)" }}>({TOKENOMICS.breakdown.communityLocksPct})</span>
                 </span>
               </div>
               <div className="u1BreakdownItem">
                 <span className="u1BreakdownDot" style={{ background: "var(--accentLavender)" }} />
-                <span className="u1BreakdownKey">Team Locks</span>
+                <span className="u1BreakdownKey">{t("usd1.label_team_locks")}</span>
                 <span className="u1BreakdownLine" />
                 <span className="u1BreakdownVal">
-                  60,152,159 <span className="u1BreakdownPct" style={{ color: "var(--accentLavender)" }}>(6.0%)</span>
+                  {TOKENOMICS.breakdown.teamLocks} <span className="u1BreakdownPct" style={{ color: "var(--accentLavender)" }}>({TOKENOMICS.breakdown.teamLocksPct})</span>
                 </span>
               </div>
               <div className="u1BreakdownItem">
                 <span className="u1BreakdownDot" style={{ background: "var(--accentCoral)" }} />
-                <span className="u1BreakdownKey">BONKfun Reserve</span>
+                <span className="u1BreakdownKey">{t("usd1.label_bonkfun_reserve")}</span>
                 <span className="u1BreakdownLine" />
                 <span className="u1BreakdownVal">
-                  181,925,054 <span className="u1BreakdownPct" style={{ color: "var(--accentCoral)" }}>(18.2%)</span>
+                  {TOKENOMICS.breakdown.bonkfunReserve} <span className="u1BreakdownPct" style={{ color: "var(--accentCoral)" }}>({TOKENOMICS.breakdown.bonkfunReservePct})</span>
                 </span>
               </div>
             </div>
@@ -343,38 +393,52 @@ export default function Usd1Page() {
           {/* Buybacks + Verification strip */}
           <div className="u1ProofStrip">
             <div className="u1ProofCard">
-              <span className="u1ProofLabel">Buyback Events</span>
-              <span className="u1ProofValue">62</span>
+              <span className="u1ProofLabel">{t("usd1.label_buyback_events")}</span>
+              <span className="u1ProofValue">{TOKENOMICS.buybacks.events}</span>
             </div>
             <div className="u1ProofDivider" />
             <div className="u1ProofCard">
-              <span className="u1ProofLabel">USD1 Removed</span>
-              <span className="u1ProofValue">68,049,982</span>
+              <span className="u1ProofLabel">{t("usd1.label_usd1_removed")}</span>
+              <span className="u1ProofValue">{TOKENOMICS.buybacks.usd1Removed}</span>
             </div>
             <div className="u1ProofDivider" />
             <div className="u1ProofCard u1ProofCardAction">
-              <span className="u1ProofLabel">Team Multisig</span>
+              <span className="u1ProofLabel">{t("usd1.label_team_multisig")}</span>
               <a
                 href="https://app.squads.so/squads/CGAys8fAeWfYGCRBZ4opFoCcdHmLyWvc3TikC2DbLXUK/home"
                 target="_blank"
                 rel="noreferrer"
                 className="u1ProofBtn"
               >
-                View on Squads
+                {t("usd1.view_on_squads")}
                 <span className="u1ProofArrow" aria-hidden="true">&#8599;</span>
               </a>
             </div>
           </div>
 
-          {/* Lock ledger graphic */}
-          <div className="u1LedgerWrap">
-            <div className="u1LedgerPlaceholder" aria-label="Lock ledger graphic placeholder">
-              <span className="u1LedgerPlaceholderText">
-                Lock Ledger Graphic
-              </span>
-              <span className="u1LedgerCaption">
-                /public/lock-ledger.png — add image to display here
-              </span>
+          {/* Lock CTA */}
+          <div className="u1LockCTASection">
+            <div className="u1LockCTAContainer">
+              <div className="u1LockCTAAccent" aria-hidden="true" />
+              <div className="u1LockCTAContent">
+                <div className="u1LockCTAText">
+                  <h3 className="u1LockCTAHeadline">{t("usd1.lock_cta_headline")}</h3>
+                  <p className="u1LockCTABody">
+                    {t("usd1.lock_cta_body")}
+                  </p>
+                </div>
+                <div className="u1LockCTAAction">
+                  <a
+                    href="https://app.streamflow.finance/token-lock"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="u1LockCTABtn"
+                  >
+                    {t("usd1.lock_cta_btn")}
+                    <span className="u1LockCTAArrow" aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -386,9 +450,18 @@ export default function Usd1Page() {
         className="section u1Section u1MemesSection"
         ref={memeSectionRef}
       >
+        {/* Floating ice-cube circles */}
+        <div className="u1MemeShapes" aria-hidden="true">
+          <div className="u1MemeShape u1MemeShape1" />
+          <div className="u1MemeShape u1MemeShape2" />
+          <div className="u1MemeShape u1MemeShape3" />
+          <div className="u1MemeShape u1MemeShape4" />
+          <div className="u1MemeShape u1MemeShape5" />
+          <div className="u1MemeShape u1MemeShape6" />
+        </div>
         <div className="container">
-          <p className="u1SectionEyebrow">Community</p>
-          <h2 className="u1SectionHeadline">Memes &amp; Art</h2>
+          <p className="u1SectionEyebrow">{t("usd1.memes_eyebrow")}</p>
+          <h2 className="u1SectionHeadline">{t("usd1.memes_headline")}</h2>
 
           <div className="u1RevolveViewport">
             <div
@@ -431,7 +504,7 @@ export default function Usd1Page() {
               type="button"
               className="u1RevolveBtn"
               onClick={() => setMemeRotation((p) => p - 1)}
-              aria-label="Previous meme"
+              aria-label={t("usd1.memes_prev")}
             >
               &#8249;
             </button>
@@ -442,7 +515,7 @@ export default function Usd1Page() {
                   type="button"
                   className={`u1RevolveDot${i === activeIndex ? " u1RevolveDotActive" : ""}`}
                   onClick={() => goToMeme(i)}
-                  aria-label={`Go to ${m.label}`}
+                  aria-label={t("usd1.memes_goto") + " " + m.label}
                   style={{ "--dot-accent": m.accent } as React.CSSProperties}
                 />
               ))}
@@ -451,7 +524,7 @@ export default function Usd1Page() {
               type="button"
               className="u1RevolveBtn"
               onClick={() => setMemeRotation((p) => p + 1)}
-              aria-label="Next meme"
+              aria-label={t("usd1.memes_next")}
             >
               &#8250;
             </button>
@@ -465,7 +538,7 @@ export default function Usd1Page() {
             style={{ color: MEMES[activeIndex].accent } as React.CSSProperties}
             aria-label="View full meme gallery on Telegram (opens in new tab)"
           >
-            View full gallery on Telegram &#8599;
+            {t("usd1.memes_gallery")} &#8599;
           </a>
         </div>
       </section>
@@ -473,22 +546,22 @@ export default function Usd1Page() {
       {/* ─── Roadmap + Community CTA ─── */}
       <section id="usd1-roadmap" className="section u1Section" style={{ paddingBottom: 40 }}>
         <div className="container">
-          <p className="u1SectionEyebrow">Roadmap</p>
-          <h2 className="u1SectionHeadline">Where we&rsquo;ve been, where we&rsquo;re going</h2>
+          <p className="u1SectionEyebrow">{t("usd1.road_eyebrow")}</p>
+          <h2 className="u1SectionHeadline">{t("usd1.road_headline")}</h2>
 
           <div className="u1Timeline">
             <div className="u1TimelineLine" aria-hidden="true" />
 
             <div className="u1Milestone u1MilestoneDone">
               <span className="u1MilestoneDot" style={{ background: "var(--accentMint)" }} />
-              <span className="u1MilestoneTitle">Launch</span>
-              <span className="u1MilestoneDesc">Token deployed on Solana via BONKfun</span>
+              <span className="u1MilestoneTitle">{t("usd1.road_launch")}</span>
+              <span className="u1MilestoneDesc">{t("usd1.road_launch_desc")}</span>
             </div>
 
             <div className="u1Milestone u1MilestoneDone">
               <span className="u1MilestoneDot" style={{ background: "var(--accentLavender)" }} />
-              <span className="u1MilestoneTitle">Multisig</span>
-              <span className="u1MilestoneDesc">Treasury migrated to Squads multisig</span>
+              <span className="u1MilestoneTitle">{t("usd1.road_multisig")}</span>
+              <span className="u1MilestoneDesc">{t("usd1.road_multisig_desc")}</span>
             </div>
 
             <div className="u1Milestone u1MilestoneOngoing">
@@ -499,8 +572,8 @@ export default function Usd1Page() {
                   <circle className="u1LoadRingArc" cx="10" cy="10" r="8" style={{ stroke: "var(--accentCoral)" }} />
                 </svg>
               </span>
-              <span className="u1MilestoneTitle">Locks</span>
-              <span className="u1MilestoneDesc">Community &amp; team locks on Streamflow</span>
+              <span className="u1MilestoneTitle">{t("usd1.road_locks")}</span>
+              <span className="u1MilestoneDesc">{t("usd1.road_locks_desc")}</span>
             </div>
 
             <div className="u1Milestone u1MilestoneOngoing">
@@ -511,44 +584,44 @@ export default function Usd1Page() {
                   <circle className="u1LoadRingArc" cx="10" cy="10" r="8" style={{ stroke: "var(--accentMint)" }} />
                 </svg>
               </span>
-              <span className="u1MilestoneTitle">Buybacks</span>
-              <span className="u1MilestoneDesc">62 events removing 68M+ USD1</span>
+              <span className="u1MilestoneTitle">{t("usd1.road_buybacks")}</span>
+              <span className="u1MilestoneDesc">{t("usd1.road_buybacks_desc")}</span>
             </div>
 
             <div className="u1Milestone u1MilestoneUpcoming">
               <span className="u1MilestoneDot u1MilestoneDotOutline" style={{ borderColor: "var(--accentLavender)", color: "var(--accentLavender)" }} />
-              <span className="u1MilestoneTitle">Ecosystem</span>
-              <span className="u1MilestoneDesc">Community growth, partnerships &amp; listings</span>
+              <span className="u1MilestoneTitle">{t("usd1.road_ecosystem")}</span>
+              <span className="u1MilestoneDesc">{t("usd1.road_ecosystem_desc")}</span>
             </div>
           </div>
 
           <p className="u1TimelineDisclaimer">
-            Milestones are directional and may change. Additional content and features are in development.
+            {t("usd1.road_disclaimer")}
           </p>
 
-          {/* Community CTA */}
+          {/* Trade CTA */}
           <div className="u1CTA">
-            <h3 className="u1CTAHeadline">Join the Community</h3>
+            <h3 className="u1CTAHeadline">{t("usd1.road_cta_headline" as any)}</h3>
             <p className="u1CTASub">
-              Follow along, share memes, and be part of the herd.
+              {t("usd1.road_cta_sub" as any)}
             </p>
             <div className="u1CTAButtons">
               <a
-                href={LINKS.x}
+                href={LINKS.jupiter}
+                target="_blank"
+                rel="noreferrer"
+                className="u1CTABtn u1CTABtnMintFilled"
+              >
+                {t("usd1.road_cta_buy" as any)}
+                <span className="u1CTAArrow" aria-hidden="true">&#8599;</span>
+              </a>
+              <a
+                href={LINKS.dexscreener}
                 target="_blank"
                 rel="noreferrer"
                 className="u1CTABtn u1CTABtnMint"
               >
-                Follow us on X
-                <span className="u1CTAArrow" aria-hidden="true">&#8599;</span>
-              </a>
-              <a
-                href={LINKS.telegram}
-                target="_blank"
-                rel="noreferrer"
-                className="u1CTABtn u1CTABtnLav"
-              >
-                Join the Telegram
+                {t("usd1.road_cta_chart" as any)}
                 <span className="u1CTAArrow" aria-hidden="true">&#8599;</span>
               </a>
             </div>
@@ -558,9 +631,17 @@ export default function Usd1Page() {
 
       {/* ─── Team ─── */}
       <section id="usd1-team" className="section u1Section u1TeamSection">
+        {/* Floating ice-cube hexagons */}
+        <div className="u1TeamShapes" aria-hidden="true">
+          {[1,2,3,4,5,6].map((n) => (
+            <svg key={n} className={`u1TeamShape u1TeamShape${n}`} viewBox="0 0 100 115.47" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polygon className="u1HexPoly" points="50,2 97,28.87 97,86.6 50,113.47 3,86.6 3,28.87" />
+            </svg>
+          ))}
+        </div>
         <div className="container">
-          <p className="u1SectionEyebrow">Team</p>
-          <h2 className="u1SectionHeadline">The people behind USD1</h2>
+          <p className="u1SectionEyebrow">{t("usd1.team_eyebrow")}</p>
+          <h2 className="u1SectionHeadline">{t("usd1.team_headline")}</h2>
 
           <div className="u1TeamGrid">
             {TEAM.map((member) => (
@@ -577,11 +658,43 @@ export default function Usd1Page() {
                 </div>
                 <div className="u1TeamInfo">
                   <span className="u1TeamName">{member.name}</span>
-                  <span className="u1TeamTitle">{member.title}</span>
-                  <p className="u1TeamDesc">{member.desc}</p>
+                  {member.handle && (
+                    <a href={member.handleUrl} target="_blank" rel="noreferrer" className="u1TeamTitle">
+                      {member.handle.split("").map((ch, j) =>
+                        ch === "0" ? <span key={j} className="u1Zero">{ch}</span> : ch
+                      )}
+                    </a>
+                  )}
+                  <p className="u1TeamDesc">{t(member.descKey as any)}</p>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Closing community CTA */}
+          <div className="u1TeamCTA">
+            <h3 className="u1TeamCTAHeadline">{t("usd1.team_cta_headline" as any)}</h3>
+            <p className="u1TeamCTASub">{t("usd1.team_cta_sub" as any)}</p>
+            <div className="u1TeamCTAButtons">
+              <a
+                href={LINKS.x}
+                target="_blank"
+                rel="noreferrer"
+                className="u1CTABtn u1CTABtnMint"
+              >
+                {t("usd1.follow_x")}
+                <span className="u1CTAArrow" aria-hidden="true">&#8599;</span>
+              </a>
+              <a
+                href={LINKS.telegram}
+                target="_blank"
+                rel="noreferrer"
+                className="u1CTABtn u1CTABtnLav"
+              >
+                {t("usd1.join_telegram")}
+                <span className="u1CTAArrow" aria-hidden="true">&#8599;</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -684,7 +797,32 @@ export default function Usd1Page() {
           max-width: 42ch;
         }
         .u1HeroActions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
           margin-bottom: 20px;
+        }
+        .u1BuyBtn {
+          font-size: 14px;
+          font-weight: 700;
+          gap: 8px;
+          background: var(--accentMint);
+          color: #fff;
+          border: 1.5px solid var(--accentMint);
+          text-decoration: none;
+          padding: 10px 22px;
+          border-radius: var(--radius-sm);
+          display: inline-flex;
+          align-items: center;
+          transition: background 160ms ease, box-shadow 160ms ease;
+        }
+        .u1BuyBtn:hover {
+          background: #1ca37f;
+          box-shadow: 0 2px 12px rgba(33, 181, 143, 0.25);
+        }
+        .u1BuyArrow {
+          font-size: 15px;
+          margin-left: 2px;
         }
         .u1CopyBtn {
           font-size: 14px;
@@ -814,6 +952,21 @@ export default function Usd1Page() {
           color: var(--accentCoral);
           border-color: rgba(255,122,107,0.35);
           background: rgba(255,122,107,0.08);
+        }
+        .u1QLPrimary {
+          background: var(--accentMint);
+          color: #fff;
+          border-color: var(--accentMint);
+          font-weight: 700;
+        }
+        .u1QLPrimary:hover {
+          background: #1ca37f;
+          border-color: #1ca37f;
+          color: #fff;
+          box-shadow: 0 2px 10px rgba(33,181,143,0.25);
+        }
+        :global(html.dark) .u1QLPrimary {
+          background: var(--accentMint);
         }
 
         /* ─── Sections shared ─── */
@@ -1207,32 +1360,133 @@ export default function Usd1Page() {
           line-height: 1;
         }
 
-        /* Lock ledger placeholder */
-        .u1LedgerWrap {
-          margin-top: 40px;
+        /* Lock CTA */
+        .u1LockCTASection {
+          margin-top: 48px;
+          padding: 0;
         }
-        .u1LedgerPlaceholder {
-          width: 100%;
-          min-height: 180px;
+        .u1LockCTAContainer {
+          position: relative;
+          padding: 36px 32px;
           border-radius: var(--radius-xl);
           background: var(--surface);
-          border: 2px dashed var(--border);
+          border: 1px solid var(--border);
+          box-shadow: var(--shadowXs);
+          transition: border-color 200ms ease, box-shadow 200ms ease;
+        }
+        :global(html.dark) .u1LockCTAContainer {
+          background: var(--surface-2);
+          border-color: var(--border);
+        }
+        .u1LockCTAContainer:hover {
+          border-color: var(--borderStrong);
+          box-shadow: var(--shadowSm);
+        }
+        :global(html.dark) .u1LockCTAContainer:hover {
+          border-color: var(--borderStrong);
+          box-shadow: var(--shadowSm);
+        }
+        .u1LockCTAAccent {
+          position: absolute;
+          top: 36px;
+          left: 32px;
+          width: 3px;
+          height: 22px;
+          border-radius: 2px;
+          background: linear-gradient(
+            180deg,
+            var(--accentMint) 0%,
+            rgba(33, 181, 143, 0.5) 100%
+          );
+        }
+        .u1LockCTAContent {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 32px 44px;
+          align-items: center;
+          padding-left: 20px;
+        }
+        .u1LockCTAText {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          justify-content: center;
           gap: 10px;
-          padding: 32px;
         }
-        .u1LedgerPlaceholderText {
+        .u1LockCTAHeadline {
+          margin: 0;
+          font-size: 20px;
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          color: var(--text);
+          line-height: 1.2;
+        }
+        .u1LockCTABody {
+          margin: 0;
           font-size: 15px;
-          font-weight: 700;
-          color: var(--muted2);
+          color: var(--muted);
+          line-height: 1.6;
+          max-width: 52ch;
+          letter-spacing: -0.01em;
         }
-        .u1LedgerCaption {
-          font-family: var(--font-mono);
-          font-size: 12px;
-          color: var(--muted2);
+        .u1LockCTAAction {
+          display: flex;
+          align-items: center;
+          flex-shrink: 0;
+        }
+        .u1LockCTABtn {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 16px;
+          font-weight: 700;
+          letter-spacing: -0.01em;
+          color: var(--accentMint);
+          text-decoration: none;
+          padding: 14px 34px 14px 30px;
+          border-radius: 999px;
+          border: 1.5px solid rgba(33, 181, 143, 0.22);
+          background: rgba(33, 181, 143, 0.05);
+          transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+          white-space: nowrap;
+          position: relative;
+          overflow: hidden;
+        }
+        .u1LockCTABtn::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            135deg,
+            rgba(33, 181, 143, 0.1) 0%,
+            rgba(33, 181, 143, 0.05) 100%
+          );
+          opacity: 0;
+          transition: opacity 200ms ease;
+        }
+        .u1LockCTABtn:hover {
+          border-color: rgba(33, 181, 143, 0.35);
+          background: rgba(33, 181, 143, 0.10);
+          transform: translateY(-1.5px);
+          box-shadow: 0 4px 16px rgba(33, 181, 143, 0.15);
+        }
+        .u1LockCTABtn:hover::before {
+          opacity: 1;
+        }
+        .u1LockCTABtn:hover .u1LockCTAArrow {
+          transform: translateX(2px);
+        }
+        .u1LockCTABtn:active {
+          transform: translateY(-0.5px);
+        }
+        .u1LockCTABtn:focus-visible {
+          outline: none;
+          box-shadow: var(--focus);
+        }
+        .u1LockCTAArrow {
+          display: inline-block;
+          transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+          font-size: 18px;
+          line-height: 1;
         }
 
         /* ────────────────────────────────────────────
@@ -1241,9 +1495,79 @@ export default function Usd1Page() {
         .u1MemesSection {
           background: rgba(33, 181, 143, 0.07) !important;
           overflow: hidden;
+          position: relative;
         }
         :global(html.dark) .u1MemesSection {
           background: rgba(33, 181, 143, 0.10) !important;
+        }
+
+        /* Floating circles — ice-cube effect */
+        .u1MemeShapes {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+        }
+        .u1MemeShape {
+          position: absolute;
+          border-radius: 50%;
+          border: 2px solid rgba(33, 181, 143, 0.12);
+          background: rgba(33, 181, 143, 0.04);
+        }
+        :global(html.dark) .u1MemeShape {
+          border-color: rgba(33, 181, 143, 0.16);
+          background: rgba(33, 181, 143, 0.05);
+        }
+        .u1MemeShape1 { width: 100px; height: 100px; top: 12%; left: 6%;
+          animation: memeShapeFloat1 20s ease-in-out infinite; }
+        .u1MemeShape2 { width: 72px; height: 72px; top: 65%; left: 78%;
+          animation: memeShapeFloat2 24s ease-in-out infinite; }
+        .u1MemeShape3 { width: 88px; height: 88px; top: 28%; left: 62%;
+          animation: memeShapeFloat3 22s ease-in-out infinite; }
+        .u1MemeShape4 { width: 56px; height: 56px; top: 78%; left: 12%;
+          animation: memeShapeFloat4 26s ease-in-out infinite; }
+        .u1MemeShape5 { width: 116px; height: 116px; top: -4%; left: 82%;
+          animation: memeShapeFloat5 18s ease-in-out infinite; }
+        .u1MemeShape6 { width: 48px; height: 48px; top: 48%; left: 32%;
+          animation: memeShapeFloat6 28s ease-in-out infinite; }
+        @keyframes memeShapeFloat1 {
+          0%, 100% { transform: translate(0,0) scale(1); }
+          25% { transform: translate(24px,-18px) scale(1.05); }
+          50% { transform: translate(12px,20px) scale(0.98); }
+          75% { transform: translate(-18px,8px) scale(1.02); }
+        }
+        @keyframes memeShapeFloat2 {
+          0%, 100% { transform: translate(0,0) scale(1); }
+          25% { transform: translate(-22px,12px) scale(0.97); }
+          50% { transform: translate(-8px,-24px) scale(1.04); }
+          75% { transform: translate(18px,-8px) scale(1); }
+        }
+        @keyframes memeShapeFloat3 {
+          0%, 100% { transform: translate(0,0) scale(1); }
+          33% { transform: translate(-18px,-20px) scale(1.03); }
+          66% { transform: translate(22px,12px) scale(0.99); }
+        }
+        @keyframes memeShapeFloat4 {
+          0%, 100% { transform: translate(0,0) scale(1); }
+          25% { transform: translate(14px,-10px) scale(1.01); }
+          50% { transform: translate(-12px,-22px) scale(0.96); }
+          75% { transform: translate(-20px,6px) scale(1.04); }
+        }
+        @keyframes memeShapeFloat5 {
+          0%, 100% { transform: translate(0,0) scale(1); }
+          33% { transform: translate(-16px,18px) scale(0.98); }
+          66% { transform: translate(10px,-12px) scale(1.02); }
+        }
+        @keyframes memeShapeFloat6 {
+          0%, 100% { transform: translate(0,0) scale(1); }
+          25% { transform: translate(20px,14px) scale(1.06); }
+          50% { transform: translate(-10px,24px) scale(0.95); }
+          75% { transform: translate(-18px,-8px) scale(1.01); }
+        }
+
+        .u1MemesSection .container {
+          position: relative;
+          z-index: 1;
         }
 
         /* Perspective wrapper */
@@ -1566,6 +1890,16 @@ export default function Usd1Page() {
           outline: none;
           box-shadow: var(--focus);
         }
+        .u1CTABtnMintFilled {
+          color: #fff;
+          border-color: var(--accentMint);
+          background: var(--accentMint);
+        }
+        .u1CTABtnMintFilled:hover {
+          background: #1ca37f;
+          border-color: #1ca37f;
+          box-shadow: 0 2px 12px rgba(33,181,143,0.25);
+        }
         .u1CTABtnMint {
           color: var(--accentMint);
           border-color: rgba(33,181,143,0.30);
@@ -1594,10 +1928,85 @@ export default function Usd1Page() {
         ──────────────────────────────────────────── */
         .u1TeamSection {
           background: rgba(255, 122, 107, 0.07) !important;
+          position: relative;
+          overflow: hidden;
         }
         :global(html.dark) .u1TeamSection {
           background: rgba(255, 122, 107, 0.10) !important;
         }
+
+        /* Floating hexagons — ice-cube effect */
+        .u1TeamShapes {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+        }
+        .u1TeamShape {
+          position: absolute;
+          overflow: visible;
+        }
+        .u1TeamShape :global(.u1HexPoly) {
+          fill: rgba(255, 122, 107, 0.04);
+          stroke: rgba(255, 122, 107, 0.12);
+          stroke-width: 2;
+        }
+        :global(html.dark) .u1TeamShape :global(.u1HexPoly) {
+          fill: rgba(255, 122, 107, 0.05);
+          stroke: rgba(255, 122, 107, 0.16);
+        }
+        .u1TeamShape1 { width: 86px; height: 100px; top: 6%; left: 8%;
+          animation: teamShapeFloat1 19s ease-in-out infinite; }
+        .u1TeamShape2 { width: 60px; height: 68px; top: 58%; left: 76%;
+          animation: teamShapeFloat2 23s ease-in-out infinite; }
+        .u1TeamShape3 { width: 72px; height: 84px; top: 24%; left: 56%;
+          animation: teamShapeFloat3 21s ease-in-out infinite; }
+        .u1TeamShape4 { width: 44px; height: 52px; top: 70%; left: 18%;
+          animation: teamShapeFloat4 25s ease-in-out infinite; }
+        .u1TeamShape5 { width: 94px; height: 108px; top: -6%; left: 86%;
+          animation: teamShapeFloat5 17s ease-in-out infinite; }
+        .u1TeamShape6 { width: 38px; height: 44px; top: 42%; left: 38%;
+          animation: teamShapeFloat6 27s ease-in-out infinite; }
+        @keyframes teamShapeFloat1 {
+          0%, 100% { transform: translate(0,0) rotate(0deg); }
+          25% { transform: translate(26px,-16px) rotate(8deg); }
+          50% { transform: translate(12px,22px) rotate(-5deg); }
+          75% { transform: translate(-18px,8px) rotate(4deg); }
+        }
+        @keyframes teamShapeFloat2 {
+          0%, 100% { transform: translate(0,0) rotate(0deg); }
+          25% { transform: translate(-22px,14px) rotate(-7deg); }
+          50% { transform: translate(-8px,-26px) rotate(6deg); }
+          75% { transform: translate(18px,-10px) rotate(-3deg); }
+        }
+        @keyframes teamShapeFloat3 {
+          0%, 100% { transform: translate(0,0) rotate(0deg); }
+          33% { transform: translate(-16px,-22px) rotate(5deg); }
+          66% { transform: translate(24px,14px) rotate(-8deg); }
+        }
+        @keyframes teamShapeFloat4 {
+          0%, 100% { transform: translate(0,0) rotate(0deg); }
+          25% { transform: translate(16px,-10px) rotate(-6deg); }
+          50% { transform: translate(-14px,-24px) rotate(4deg); }
+          75% { transform: translate(-22px,6px) rotate(-2deg); }
+        }
+        @keyframes teamShapeFloat5 {
+          0%, 100% { transform: translate(0,0) rotate(0deg); }
+          33% { transform: translate(-14px,20px) rotate(7deg); }
+          66% { transform: translate(10px,-14px) rotate(-4deg); }
+        }
+        @keyframes teamShapeFloat6 {
+          0%, 100% { transform: translate(0,0) rotate(0deg); }
+          25% { transform: translate(18px,16px) rotate(5deg); }
+          50% { transform: translate(-8px,26px) rotate(-6deg); }
+          75% { transform: translate(-16px,-8px) rotate(3deg); }
+        }
+
+        .u1TeamSection .container {
+          position: relative;
+          z-index: 1;
+        }
+
         .u1TeamGrid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
@@ -1654,6 +2063,21 @@ export default function Usd1Page() {
           font-size: 12.5px;
           font-weight: 600;
           color: var(--team-accent);
+          text-decoration: none;
+        }
+        .u1Zero {
+          position: relative;
+        }
+        .u1Zero::after {
+          content: "";
+          position: absolute;
+          top: 18%;
+          bottom: 18%;
+          left: 50%;
+          width: 1.2px;
+          background: currentColor;
+          transform: translateX(-50%) rotate(24deg);
+          pointer-events: none;
         }
         .u1TeamDesc {
           margin: 4px 0 0 0;
@@ -1662,13 +2086,44 @@ export default function Usd1Page() {
           line-height: 1.45;
         }
 
+        /* Team closing CTA */
+        .u1TeamCTA {
+          text-align: center;
+          padding-top: 52px;
+        }
+        .u1TeamCTAHeadline {
+          margin: 0 0 8px 0;
+          font-size: 22px;
+          font-weight: 800;
+          letter-spacing: -0.02em;
+          color: var(--text);
+        }
+        .u1TeamCTASub {
+          margin: 0 0 20px 0;
+          font-size: 15px;
+          color: var(--muted);
+          line-height: 1.5;
+        }
+        .u1TeamCTAButtons {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
         /* ─── Responsive ─── */
         @media (max-width: 980px) {
           .u1HeroContainer {
             grid-template-columns: 1fr;
             gap: 36px;
           }
+          .u1HeroContent {
+            align-items: center;
+            text-align: center;
+          }
           .u1HeroTitle { font-size: 40px; }
+          .u1HeroActions { justify-content: center; }
+          .u1MintRow { align-items: center; }
           .u1HeroVisual { order: -1; }
           .u1HeroImg { max-width: 260px; }
           .u1AboutHeadline { font-size: 34px; }
@@ -1681,6 +2136,9 @@ export default function Usd1Page() {
           .u1RevolveRing { width: 180px; height: 180px; }
           .u1RevolveItem { width: 180px; height: 180px;
             transform: rotateY(calc(var(--ri) * 40deg)) translateZ(340px);
+          }
+          .u1LockCTAContent {
+            gap: 32px;
           }
         }
 
@@ -1704,6 +2162,7 @@ export default function Usd1Page() {
           .u1QLGrid {
             flex-direction: column;
             gap: 24px;
+            align-items: center;
           }
           .u1QLDivider {
             width: 100%;
@@ -1742,6 +2201,29 @@ export default function Usd1Page() {
           .u1MilestoneDesc { max-width: none; }
           .u1CTAHeadline { font-size: 15px; }
           .u1CTAButtons { flex-direction: column; align-items: center; }
+          .u1LockCTAContainer {
+            padding: 28px 24px;
+          }
+          .u1LockCTAAccent {
+            top: 28px;
+            left: 24px;
+            height: 20px;
+          }
+          .u1LockCTAContent {
+            grid-template-columns: 1fr;
+            gap: 20px 0;
+            padding-left: 18px;
+          }
+          .u1LockCTAText {
+            gap: 8px;
+          }
+          .u1LockCTAAction {
+            padding-top: 0;
+          }
+          .u1LockCTABtn {
+            width: 100%;
+            justify-content: center;
+          }
         }
 
         @media (max-width: 600px) {
@@ -1756,6 +2238,25 @@ export default function Usd1Page() {
           }
           .u1RevolveDots { gap: 6px; }
           .u1RevolveDot { width: 6px; height: 6px; }
+          .u1LockCTAContainer {
+            padding: 24px 20px;
+          }
+          .u1LockCTAAccent {
+            top: 24px;
+            left: 20px;
+            height: 18px;
+          }
+          .u1LockCTAContent {
+            padding-left: 16px;
+            gap: 16px 0;
+          }
+          .u1LockCTAHeadline {
+            font-size: 18px;
+          }
+          .u1LockCTABody {
+            font-size: 14px;
+            line-height: 1.55;
+          }
         }
       `}</style>
     </>

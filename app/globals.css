@@ -583,6 +583,35 @@ html.dark .siteHeader {
   box-shadow: var(--focus);
 }
 
+/* Desktop overlay trigger buttons (How to Buy / FAQ) */
+.siteHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.siteNavOverlayBtn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--accentMint);
+  border: 1.5px solid rgba(33, 181, 143, 0.30);
+  background: rgba(33, 181, 143, 0.06);
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.siteNavOverlayBtn:hover {
+  border-color: rgba(33, 181, 143, 0.52);
+  background: rgba(33, 181, 143, 0.13);
+  color: var(--accentMint);
+}
+.siteNavOverlayBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
 .siteHeaderRight {
   display: flex;
   align-items: center;
@@ -625,6 +654,7 @@ html.dark .siteHeader {
 }
 
 @media (max-width: 920px) {
+  .siteHeaderActions,
   .siteHeaderSocials,
   .siteHeaderDivider {
     display: none;
@@ -1017,27 +1047,13 @@ html.dark .langDropdownFlag {
   }
 }
 
-/* Mobile overlay */
-.siteMobileOverlay {
-  display: none;
-}
+/* ─── Mobile full-screen menu (Apple-style) ─── */
+/* Element is conditionally rendered by React — no display:none needed */
 
-.siteMobilePanel {
-  display: none;
-  border-top: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  animation: mobileSlideIn 200ms ease;
-}
-html.dark .siteMobilePanel {
-  background: rgba(17, 24, 39, 0.95);
-}
-
-@keyframes mobileSlideIn {
+@keyframes mobileItemIn {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -1045,66 +1061,141 @@ html.dark .siteMobilePanel {
   }
 }
 
-.siteMobilePanelInner {
-  display: grid;
-  gap: 4px;
-  padding: 12px 20px 20px 20px;
+.siteMobileScreen {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 59; /* below header (z-60), above page content */
+  padding: 72px 32px 36px 32px;
+  background: var(--bg);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
+
+.siteMobileFlow {
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+}
+
 .siteMobileLink {
-  padding: 14px 16px;
-  border-radius: 10px;
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 500;
+  display: block;
   border: none;
   background: transparent;
-  transition: background 120ms ease;
+  font-family: inherit;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  line-height: 1.15;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0;
+  animation: mobileItemIn 320ms ease forwards;
+  transition: color 120ms ease;
 }
-.siteMobileLink:hover {
-  background: rgba(33, 181, 143, 0.08);
+.siteMobileLink:last-child {
+  border-bottom: none;
+}
+.siteMobileLink:hover,
+.siteMobileLink:active {
+  color: var(--accentMint);
 }
 .siteMobileLink:focus-visible {
   outline: none;
-  box-shadow: var(--focus);
+  color: var(--accentMint);
 }
 
-/* Mobile social buttons */
-.siteMobileSocials {
+/* Pill buttons (How to Buy / FAQ) */
+.siteMobilePills {
   display: flex;
-  gap: 8px;
-  margin-top: 8px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
+  gap: 10px;
+  padding: 20px 0 0 0;
+  opacity: 0;
+  animation: mobileItemIn 320ms ease forwards;
 }
-.siteMobileSocialBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--muted);
+.siteMobilePill {
+  appearance: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--accentMint);
+  background: transparent;
+  border: 1.5px solid var(--accentMint);
+  border-radius: 999px;
+  padding: 12px 28px;
   background: rgba(33, 181, 143, 0.06);
-  border: 1px solid rgba(33, 181, 143, 0.12);
-  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease, transform 140ms ease;
 }
-html.dark .siteMobileSocialBtn {
-  background: rgba(33, 181, 143, 0.08);
-  border-color: rgba(33, 181, 143, 0.14);
+.siteMobilePill:hover,
+.siteMobilePill:active {
+  background: var(--accentMint);
+  color: var(--bg);
+  transform: translateY(-1px);
 }
-.siteMobileSocialBtn:hover {
-  color: var(--text);
-  background: rgba(33, 181, 143, 0.12);
-  border-color: rgba(33, 181, 143, 0.24);
-}
-.siteMobileSocialBtn:focus-visible {
+.siteMobilePill:focus-visible {
   outline: none;
   box-shadow: var(--focus);
 }
 
+/* Social links */
+.siteMobileSocials {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-top: 20px;
+  opacity: 0;
+  animation: mobileItemIn 320ms ease forwards;
+}
+.siteMobileSocialRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  transition: color 120ms ease;
+}
+.siteMobileSocialRow:last-child {
+  border-bottom: none;
+}
+.siteMobileSocialRow:hover,
+.siteMobileSocialRow:active {
+  color: var(--text);
+}
+.siteMobileSocialRow:focus-visible {
+  outline: none;
+  color: var(--text);
+}
+.siteMobileSocialArrow {
+  margin-left: auto;
+  font-size: 14px;
+  opacity: 0.4;
+}
+
+/* Hamburger — always prominent, not muted */
 .siteHamburger {
   display: none;
+  color: var(--text);
+}
+.siteHamburger[aria-expanded="true"] {
+  color: var(--accentCoral);
+}
+.siteHamburger:hover {
+  color: var(--text);
+  background: rgba(255, 122, 107, 0.08);
 }
 
 @media (max-width: 920px) {
@@ -1114,23 +1205,43 @@ html.dark .siteMobileSocialBtn {
   .siteHamburger {
     display: inline-flex;
   }
-  .siteMobileOverlay {
-    display: block;
-    position: fixed;
-    inset: 0;
-    top: 0;
-    z-index: 55;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(2px);
-  }
-  html.dark .siteMobileOverlay {
-    background: rgba(0, 0, 0, 0.4);
-  }
-  .siteMobilePanel {
-    display: block;
-    position: relative;
-    z-index: 61;
-  }
 }
+
+/* ─── USD1 splash screen (pixelated burst) ─── */
+#u1-splash {
+  animation: u1SplashDone 0.01s linear 2.7s forwards;
+}
+.u1SplashCell {
+  position: absolute;
+  width: 10.1vw;
+  height: 14.4vh;
+  background: var(--bg, #fbfaf6);
+  animation: u1CellBurst 500ms ease-in forwards;
+  will-change: transform, opacity;
+}
+.u1SplashText {
+  position: relative;
+  z-index: 1;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: var(--muted, #6b7280);
+  font-style: italic;
+  animation: u1TextPop 600ms ease-in forwards;
+  animation-delay: 2s;
+}
+@keyframes u1CellBurst {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0) rotate(12deg); opacity: 0; }
+}
+@keyframes u1TextPop {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.4); filter: blur(8px); }
+}
+@keyframes u1SplashDone {
+  to { visibility: hidden; pointer-events: none; }
+}
+html.dark .u1SplashCell { background: var(--bg, #0f1214); }
+html.dark .u1SplashText { color: var(--muted, #6b7280); }
 
 

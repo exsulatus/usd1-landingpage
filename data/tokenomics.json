@@ -1,0 +1,23 @@
+{
+  "_README": "Edit these numbers weekly. Push to deploy. All values are strings for display formatting.",
+
+  "totalSupply": "999,834,836",
+  "totalSupplyRaw": 999834836.562034,
+  "circulatingSupply": "599,628,672",
+  "controlledSupply": "400,206,164",
+  "controlledSupplyRaw": 400206164,
+
+  "breakdown": {
+    "communityLocks": "150,231,128",
+    "communityLocksPct": "15.0%",
+    "teamLocks": "60,152,159",
+    "teamLocksPct": "6.0%",
+    "bonkfunReserve": "181,925,054",
+    "bonkfunReservePct": "18.2%"
+  },
+
+  "buybacks": {
+    "events": "62",
+    "usd1Removed": "68,049,982"
+  }
+}

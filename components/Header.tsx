@@ -7,23 +7,24 @@ import { MascotMark } from "@/components/MascotMark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { IconMenu, IconX, IconTelegram, IconClose } from "@/components/icons";
+import { useI18n } from "@/lib/i18n/context";
 
-type NavItem = { label: string; href: string };
+type NavItem = { labelKey: string; href: string };
 
 const DEFAULT_NAV: NavItem[] = [
-  { label: "About", href: "/#about" },
-  { label: "Learn", href: "/#learn" },
-  { label: "Fun & Games", href: "/#fun" },
-  { label: "News", href: "/#news" },
-  { label: "Discover", href: "/#discover" },
+  { labelKey: "nav.about", href: "/#about" },
+  { labelKey: "nav.learn", href: "/#learn" },
+  { labelKey: "nav.games", href: "/#fun" },
+  { labelKey: "nav.news", href: "/#news" },
+  { labelKey: "nav.discover", href: "/#discover" },
 ];
 
 const USD1_NAV: NavItem[] = [
-  { label: "About", href: "#usd1-about" },
-  { label: "Tokenomics", href: "#usd1-tokenomics" },
-  { label: "Memes", href: "#usd1-memes" },
-  { label: "Roadmap", href: "#usd1-roadmap" },
-  { label: "Team", href: "#usd1-team" },
+  { labelKey: "nav.about", href: "#usd1-about" },
+  { labelKey: "nav.tokenomics", href: "#usd1-tokenomics" },
+  { labelKey: "nav.memes", href: "#usd1-memes" },
+  { labelKey: "nav.roadmap", href: "#usd1-roadmap" },
+  { labelKey: "nav.team", href: "#usd1-team" },
 ];
 
 const SOCIAL_LINKS = {
@@ -35,6 +36,7 @@ export function Header() {
   const pathname = usePathname();
   const isUsd1 = pathname === "/usd1";
   const nav = isUsd1 ? USD1_NAV : DEFAULT_NAV;
+  const { t } = useI18n();
 
   const [open, setOpen] = React.useState(false);
 
@@ -70,118 +72,169 @@ export function Header() {
     [],
   );
 
+  const openFooterOverlay = React.useCallback(
+    (panel: "howto" | "faq") => {
+      window.dispatchEvent(
+        new CustomEvent("open-footer-overlay", { detail: panel }),
+      );
+      /* Delay closing the menu so the overlay backdrop fades in first,
+         preventing a flash of the underlying page */
+      setTimeout(() => setOpen(false), 180);
+    },
+    [],
+  );
+
   return (
-    <header className="siteHeader">
-      <div className="siteHeaderBar container">
-        {/* ── Left: Brand ── */}
-        <MascotMark />
+    <>
+      <header className="siteHeader">
+        <div className="siteHeaderBar container">
+          {/* ── Left: Brand ── */}
+          <MascotMark />
 
-        {/* ── Center: Navigation ── */}
-        <nav className="siteNav" aria-label="Primary navigation">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="siteNavLink"
-              onClick={(e) => handleNavClick(e, item.href)}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+          {/* ── Center: Navigation ── */}
+          <nav className="siteNav" aria-label="Primary navigation">
+            {nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="siteNavLink"
+                onClick={(e) => handleNavClick(e, item.href)}
+              >
+                {t(item.labelKey as keyof typeof import("@/lib/i18n/translations/en").default)}
+              </Link>
+            ))}
+          </nav>
 
-        {/* ── Right: Actions ── */}
-        <div className="siteHeaderRight">
-          {/* Social links */}
-          <div className="siteHeaderSocials">
-            <a
-              href={SOCIAL_LINKS.x}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="siteHeaderSocialBtn"
-              aria-label="Follow us on X"
+          {/* ── Right: Actions ── */}
+          <div className="siteHeaderRight">
+            {/* Overlay triggers */}
+            <div className="siteHeaderActions">
+              <button
+                type="button"
+                className="siteNavOverlayBtn"
+                onClick={() => openFooterOverlay("howto")}
+              >
+                {t("footer.how_to_buy" as any)}
+              </button>
+              <button
+                type="button"
+                className="siteNavOverlayBtn"
+                onClick={() => openFooterOverlay("faq")}
+              >
+                {t("footer.faq" as any)}
+              </button>
+            </div>
+
+            <span className="siteHeaderDivider" aria-hidden="true" />
+
+            {/* Social links */}
+            <div className="siteHeaderSocials">
+              <a
+                href={SOCIAL_LINKS.x}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="siteHeaderSocialBtn"
+                aria-label={t("header.follow_x")}
+              >
+                <IconX size={16} />
+              </a>
+              <a
+                href={SOCIAL_LINKS.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="siteHeaderSocialBtn"
+                aria-label={t("header.join_telegram")}
+              >
+                <IconTelegram size={16} />
+              </a>
+            </div>
+
+            <span className="siteHeaderDivider" aria-hidden="true" />
+
+            <LanguageToggle />
+            <ThemeToggle />
+
+            {/* Hamburger (mobile only) */}
+            <button
+              type="button"
+              className="siteHeaderIconBtn siteHamburger"
+              onClick={() => setOpen((v) => !v)}
+              aria-label={open ? t("header.close_menu") : t("header.open_menu")}
+              aria-expanded={open}
             >
-              <IconX size={16} />
-            </a>
-            <a
-              href={SOCIAL_LINKS.telegram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="siteHeaderSocialBtn"
-              aria-label="Join our Telegram"
-            >
-              <IconTelegram size={16} />
-            </a>
+              {open ? <IconClose size={22} /> : <IconMenu />}
+            </button>
           </div>
-
-          <span className="siteHeaderDivider" aria-hidden="true" />
-
-          <LanguageToggle />
-          <ThemeToggle />
-
-          {/* Hamburger (mobile only) */}
-          <button
-            type="button"
-            className="siteHeaderIconBtn siteHamburger"
-            onClick={() => setOpen((v) => !v)}
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-          >
-            {open ? <IconClose size={22} /> : <IconMenu />}
-          </button>
         </div>
-      </div>
+      </header>
 
-      {/* ── Mobile drawer ── */}
+      {/* ── Mobile full-screen menu (rendered outside header to avoid backdrop-filter containing block) ── */}
       {open && (
-        <>
-          <div
-            className="siteMobileOverlay"
-            onClick={() => setOpen(false)}
-            aria-hidden="true"
-          />
-          <div className="siteMobilePanel" role="dialog" aria-label="Menu">
-            <div className="siteMobilePanelInner container">
-              {nav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="siteMobileLink"
-                  onClick={(e) => {
-                    handleNavClick(e, item.href);
-                    setOpen(false);
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ))}
+        <div className="siteMobileScreen" role="dialog" aria-label="Menu">
+          <div className="siteMobileFlow">
+            {nav.map((item, i) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="siteMobileLink"
+                style={{ animationDelay: `${i * 35}ms` }}
+                onClick={(e) => {
+                  handleNavClick(e, item.href);
+                  setOpen(false);
+                }}
+              >
+                {t(item.labelKey as keyof typeof import("@/lib/i18n/translations/en").default)}
+              </Link>
+            ))}
 
-              <div className="siteMobileSocials">
-                <a
-                  href={SOCIAL_LINKS.x}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="siteMobileSocialBtn"
-                  aria-label="Follow us on X"
-                >
-                  <IconX size={18} />
-                  <span>Follow on X</span>
-                </a>
-                <a
-                  href={SOCIAL_LINKS.telegram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="siteMobileSocialBtn"
-                  aria-label="Join our Telegram"
-                >
-                  <IconTelegram size={18} />
-                  <span>Join Telegram</span>
-                </a>
-              </div>
+            <div
+              className="siteMobilePills"
+              style={{ animationDelay: `${nav.length * 35}ms` }}
+            >
+              <button
+                type="button"
+                className="siteMobilePill"
+                onClick={() => openFooterOverlay("howto")}
+              >
+                {t("footer.how_to_buy" as any)}
+              </button>
+              <button
+                type="button"
+                className="siteMobilePill"
+                onClick={() => openFooterOverlay("faq")}
+              >
+                {t("footer.faq" as any)}
+              </button>
+            </div>
+
+            <div
+              className="siteMobileSocials"
+              style={{ animationDelay: `${(nav.length + 1) * 35}ms` }}
+            >
+              <a
+                href={SOCIAL_LINKS.x}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="siteMobileSocialRow"
+              >
+                <IconX size={15} />
+                <span>X (Twitter)</span>
+                <span className="siteMobileSocialArrow" aria-hidden="true">&#8599;</span>
+              </a>
+              <a
+                href={SOCIAL_LINKS.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="siteMobileSocialRow"
+              >
+                <IconTelegram size={15} />
+                <span>Telegram</span>
+                <span className="siteMobileSocialArrow" aria-hidden="true">&#8599;</span>
+              </a>
             </div>
           </div>
-        </>
+        </div>
       )}
-    </header>
+    </>
   );
 }
