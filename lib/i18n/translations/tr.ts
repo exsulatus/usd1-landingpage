@@ -21,6 +21,7 @@ const tr: TranslationKeys = {
   "usd1.splash": "shhh...",
   "usd1.hero_eyebrow": "Topluluk Odaklı Solana Token\u2019ı",
   "usd1.hero_tagline": "Şeffaflık üzerine inşa edildi, kamuya açık doğrulama ile desteklendi.",
+  "usd1.buy_on_jupiter": "Jupiter'da satın al",
   "usd1.copy_mint": "Mint Adresini Kopyala",
   "usd1.copied": "Kopyalandı!",
   "usd1.mint_note": "Ticker çakışması mevcut — mint adresini doğrulayın.",
@@ -76,6 +77,10 @@ const tr: TranslationKeys = {
   "usd1.road_ecosystem": "Ekosistem",
   "usd1.road_ecosystem_desc": "Topluluk büyümesi, ortaklıklar & listeler",
   "usd1.road_disclaimer": "Kilometre taşları yönlendiricidir ve değişebilir. Ek içerik ve özellikler geliştirme aşamasındadır.",
+  "usd1.road_cta_headline": "Gördüğünüz hoşunuza gitti mi?",
+  "usd1.road_cta_sub": "USD1 Solana'da yayında. Takas yapın, doğrulayın ve kendiniz karar verin.",
+  "usd1.road_cta_buy": "Jupiter'da satın al",
+  "usd1.road_cta_chart": "Grafiği görüntüle",
   "usd1.join_headline": "Topluluğa Katılın",
   "usd1.join_sub": "Bizi takip edin, meme paylaşın ve birlikte inşa edin.",
   "usd1.follow_x": "X\u2019te bizi takip edin",
@@ -134,6 +139,7 @@ const tr: TranslationKeys = {
   "footer.howto_slippage_p2": "İnce veya hızlı hareket eden piyasalarda\u2014memecoin\u2019lerde yaygın\u2014slippage önemli olabilir. Çoğu swap arayüzü bir slippage toleransı belirlemenize izin verir (ör. %0,5\u20133). Fiyat toleransınızdan fazla hareket ederse, işlem daha kötü bir fiyatta gerçekleşmek yerine geri döner.",
   "footer.howto_slippage_tip": "Düşük tolerans = daha fazla koruma ama daha fazla başarısız işlem. Yüksek tolerans = gerçekleşme olasılığı daha yüksek ama olası daha kötü fiyat. Muhafazakâr başlayın ve ayarlayın.",
   "footer.howto_slippage_back": "\u2190 Güvenlik kontrollerine geri dön",
+  "footer.howto_cta": "Jupiter'ı aç",
 };
 
 export default tr;
