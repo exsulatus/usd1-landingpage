@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { LanguageProvider } from "@/lib/i18n/context";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://theunicornsheep.dog"),
   title: "UnicornSheepDog1 (USD1) — Community-Driven Solana Token",
   description:
     "USD1 is a community-driven Solana token built on transparency — public locks, disclosed reserves, and verifiable buybacks. Trade on Jupiter, verify on-chain.",
@@ -13,13 +14,13 @@ export const metadata: Metadata = {
     title: "UnicornSheepDog1 (USD1)",
     description:
       "Community-driven Solana token built on transparency — public locks, disclosed reserves, and verifiable buybacks.",
-    url: "https://theunicornsheep.dog/usd1",
+    url: "https://theunicornsheep.dog",
     siteName: "UnicornSheepDog1",
     images: [
       {
         url: "/images/memes/usd1.hero.png",
-        width: 1200,
-        height: 630,
+        width: 2048,
+        height: 2048,
         alt: "UnicornSheepDog1 (USD1)",
       },
     ],
