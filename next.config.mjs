@@ -13,7 +13,7 @@ const nextConfig = {
     return [
       {
         // Redirect everything except /usd1 and static assets to the landing page
-        source: "/((?!usd1|_next|images|icon\\.svg|favicon\\.ico).*)",
+        source: "/((?!usd1|_next|images|icon\\.svg|favicon\\.ico).+)",
         destination: "/",
         permanent: false,
       },
