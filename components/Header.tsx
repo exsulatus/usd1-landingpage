@@ -34,7 +34,7 @@ const SOCIAL_LINKS = {
 
 export function Header() {
   const pathname = usePathname();
-  const isUsd1 = pathname === "/usd1";
+  const isUsd1 = pathname === "/usd1" || pathname === "/";
   const nav = isUsd1 ? USD1_NAV : DEFAULT_NAV;
   const { t } = useI18n();
 
