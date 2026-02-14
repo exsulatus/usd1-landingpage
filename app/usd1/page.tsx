@@ -2146,6 +2146,13 @@ export default function Usd1Page() {
           .u1Hero { padding: 48px 0 40px 0; }
           .u1HeroTitle { font-size: 34px; }
           .u1HeroTagline { font-size: 17px; }
+          .u1Mint {
+            font-size: 10.5px;
+            padding: 8px 12px;
+          }
+          .u1TokenMintAddr {
+            font-size: 10.5px;
+          }
           .u1SectionHeadline { font-size: 28px; }
           .u1AboutHeadline { font-size: 28px; }
           .u1AboutFeatures {

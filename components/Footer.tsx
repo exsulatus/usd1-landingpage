@@ -147,7 +147,7 @@ export function Footer() {
                     <ul className="linkList">
                       <li>
                         <a
-                          href="https://dexscreener.com/solana"
+                          href="https://dexscreener.com/solana/32vjneqs23a7vhh6g8gcuwem14ffssj1kdzz59hz5nyk"
                           className="footerLink"
                           target="_blank"
                           rel="noreferrer"
@@ -157,7 +157,7 @@ export function Footer() {
                       </li>
                       <li>
                         <a
-                          href="https://jup.ag"
+                          href="https://jup.ag/tokens/5H1jkA7erRxwD8uqH8KimMD74ctjUYBd32rbp2jubonk"
                           className="footerLink"
                           target="_blank"
                           rel="noreferrer"
@@ -167,7 +167,7 @@ export function Footer() {
                       </li>
                       <li>
                         <a
-                          href="https://solscan.io/"
+                          href="https://solscan.io/token/5H1jkA7erRxwD8uqH8KimMD74ctjUYBd32rbp2jubonk"
                           className="footerLink"
                           target="_blank"
                           rel="noreferrer"
@@ -177,7 +177,7 @@ export function Footer() {
                       </li>
                       <li>
                         <a
-                          href="https://streamflow.finance/"
+                          href="https://app.streamflow.finance/token-dashboard/solana/mainnet/5H1jkA7erRxwD8uqH8KimMD74ctjUYBd32rbp2jubonk"
                           className="footerLink"
                           target="_blank"
                           rel="noreferrer"
@@ -336,7 +336,7 @@ export function Footer() {
                             <span className="stepNum">3</span>
                             <span className="stepText">
                               {t("footer.howto_step3_pre" as any)}{" "}
-                              <a href="https://jup.ag" target="_blank" rel="noreferrer" className="overlayLink">
+                              <a href="https://jup.ag/tokens/5H1jkA7erRxwD8uqH8KimMD74ctjUYBd32rbp2jubonk" target="_blank" rel="noreferrer" className="overlayLink">
                                 Jupiter
                               </a>{" "}
                               {t("footer.howto_step3_post" as any)}
@@ -418,7 +418,7 @@ export function Footer() {
 
                     <div className="howToCTARow">
                       <a
-                        href="https://jup.ag"
+                        href="https://jup.ag/tokens/5H1jkA7erRxwD8uqH8KimMD74ctjUYBd32rbp2jubonk"
                         target="_blank"
                         rel="noreferrer"
                         className="howToCTABtn"
