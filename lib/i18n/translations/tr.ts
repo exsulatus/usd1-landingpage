@@ -87,6 +87,8 @@ const tr: TranslationKeys = {
   "usd1.join_telegram": "Telegram\u2019a Katılın",
   "usd1.team_eyebrow": "Ekip",
   "usd1.team_headline": "USD1\u2019ı inşa eden insanlar",
+  "usd1.team_cta_headline": "Bize katılmaya hazır mısınız?",
+  "usd1.team_cta_sub": "Yolculuğu takip edin, fikirlerinizi paylaşın ve toplulukla birlikte inşa edin.",
   "usd1.team_exs": "Geliştirme, şeffaflık altyapısı ve devam eden yaratıcı yönlendirmeye odaklanmıştır.",
   "usd1.team_genie": "Kripto proje ortamlarındaki önceki deneyimiyle yaratıcı çıktı ve topluluk perspektifini destekler.",
   "usd1.team_duck": "Listeler ve doğrulama ile ilgili iletişim, sosyal altyapı ve tanıtım konularında yardımcı olur.",
