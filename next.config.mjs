@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  async redirects() {
+  async rewrites() {
     return [
       {
         source: "/",
-        destination: "/usd1",
-        permanent: false, // temporary — remove when edu site launches
+        destination: "/usd1", // temporary — remove when edu site launches
       },
     ];
   },
