@@ -3,17 +3,17 @@
 
   "totalSupply": "999,834,836",
   "totalSupplyRaw": 999834836.562034,
-  "circulatingSupply": "599,628,672",
-  "controlledSupply": "400,206,164",
-  "controlledSupplyRaw": 400206164,
+  "circulatingSupply": "591,554,456",
+  "controlledSupply": "408,280,380",
+  "controlledSupplyRaw": 408280380,
 
   "breakdown": {
-    "communityLocks": "150,231,128",
-    "communityLocksPct": "15.0%",
-    "teamLocks": "60,152,159",
-    "teamLocksPct": "6.0%",
-    "bonkfunReserve": "181,925,054",
-    "bonkfunReservePct": "18.2%"
+    "communityLocks": "155,231,128",
+    "communityLocksPct": "15.5%",
+    "teamLocks": "70,152,159",
+    "teamLocksPct": "7.0%",
+    "bonkfunReserve": "182,897,093",
+    "bonkfunReservePct": "18.3%"
   },
 
   "buybacks": {
